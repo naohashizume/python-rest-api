@@ -6,7 +6,11 @@
 
 from manager.pressure_reading_manager import PressureReadingManager
 from manager.temperature_reading_manager import TemperatureReadingManager
+from readings.pressure_reading import PressureReading
+from readings.temperature_reading import TemperatureReading
+
 import json
+import datetime
 
 temp_results_file = "data/temperature_results.csv"
 press_results_file = "data/pressure_results.csv"
@@ -16,6 +20,14 @@ from flask import request
 app = Flask(__name__)
 
 DEFAULT_SEQ_NUM = 0
+TIMESTAMP = "timestamp"
+SENSOR_NAME = "sensor_name"
+MIN_READING = "min_reading"
+AVG_READING = "avg_reading"
+MAX_READING = "max_reading"
+STATUS = "status"
+TEMP_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+PRESS_DATE_FORMAT = "%Y-%m-%d %H:%M"
 
 
 @app.route('/sensor/<sensor_type>/add', methods=['POST'])
@@ -23,9 +35,11 @@ def add_reading(sensor_type):
     if sensor_type == "pressure":
         press_sensor = PressureReadingManager(press_results_file)
         json_reading = request.get_json()
-        reading_data = [json_reading['timestamp'], json_reading['sensor_name'], DEFAULT_SEQ_NUM, json_reading['low_reading'], json_reading['avg_reading'], json_reading['max_reading'], json_reading['status']]
-        reading_object = press_sensor.convert_new_reading(reading_data)
-        press_sensor.add_reading(reading_object)
+        temp_timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], PRESS_DATE_FORMAT)
+        new_reading = PressureReading(temp_timestamp, json_reading[SENSOR_NAME], DEFAULT_SEQ_NUM, json_reading[MIN_READING], json_reading[AVG_READING], json_reading[MAX_READING], json_reading[STATUS])
+        #reading_data = [json_reading['timestamp'], json_reading['sensor_name'], DEFAULT_SEQ_NUM, json_reading['low_reading'], json_reading['avg_reading'], json_reading['max_reading'], json_reading['status']]
+        #reading_object = press_sensor.convert_new_reading(reading_data)
+        press_sensor.add_reading(new_reading)
 
         response = app.response_class(
             response='Reading added successfully',
