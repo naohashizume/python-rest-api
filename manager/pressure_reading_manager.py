@@ -41,13 +41,10 @@ class PressureReadingManager(AbstractReadingManager):
 
         return pressure_reading
 
-
-
     def _write_reading_row(self, pressure_reading):
-        """"""
-        #timestamp = datetime.datetime.strptime(pressure_reading.get_timestamp(), "%Y-%m-%d %H:%M")
-
-        pres_reading_list = [ pressure_reading.get_timestamp().strftime("%Y-%m-%d %H:%M"),
+        """ Convert reading string and Returns reading list"""
+        pres_reading_list = [
+                              pressure_reading.get_timestamp().strftime("%Y-%m-%d %H:%M"),
                               pressure_reading.get_sensor_model(),
                               pressure_reading.get_sequence_num(),
                               pressure_reading.get_min_value(),
@@ -55,5 +52,4 @@ class PressureReadingManager(AbstractReadingManager):
                               pressure_reading.get_max_value(),
                               pressure_reading.get_status()
                               ]
-
         return pres_reading_list
