@@ -1,7 +1,12 @@
+# temperature_reading_manager.py
+#
+# Extends AbstractReadingManager class to handle temperature readings
+#
+# Author: Matt Harrison, Nao Hashizume, Set 2B
+
 import datetime
 from manager.abstract_reading_manager import AbstractReadingManager
 from readings.temperature_reading import TemperatureReading
-
 
 class TemperatureReadingManager(AbstractReadingManager):
     """ Temperature Sensor concrete implementation """
@@ -15,7 +20,6 @@ class TemperatureReadingManager(AbstractReadingManager):
     HIGH_INDEX = 5
     STATUS_INDEX = 6
 
-    """ Constructor for TemperatureSensor class """
     def __init__(self, filename):
         """ Constructor for PressureSensor Class """
         super().__init__(filename)
@@ -36,7 +40,7 @@ class TemperatureReadingManager(AbstractReadingManager):
         return temp_reading
 
     def _write_reading_row(self, temp_reading):
-        """"""
+        """ Write reading to csv file  """
         temp_reading_list = [temp_reading.get_timestamp().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
                              temp_reading.get_sequence_num(),
                              temp_reading.get_sensor_model(),
