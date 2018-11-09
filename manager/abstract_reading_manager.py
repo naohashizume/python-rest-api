@@ -1,8 +1,9 @@
+# abstract_reading.py
 #
-# Authors: Nao Hashizume, Matt Harrison
+# Abstract Reading script
 #
-# abstract_reading_manager.py
-#
+# Authors: Nao Hashizume, Matt Harrison, Set 2B
+
 from readings.abstract_reading import AbstractReading
 
 import csv
@@ -11,7 +12,7 @@ import json
 class AbstractReadingManager:
     """ Abstract Reading Manager Class """
     FILE_NAME_STR = "File name"
-    
+
     def __init__(self, filename):
         """ Initializes the abstract reading manager """
         AbstractReadingManager._validate_string_input(AbstractReadingManager.FILE_NAME_STR, filename)
