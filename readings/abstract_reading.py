@@ -1,7 +1,13 @@
+# abstract_reading.py
+#
+# Abstract Reading script
+#
+# Authors: Matt Harrison, Nao Hashizume, Set 2B
+
 import json
 
 class AbstractReading:
-    """ Temperature Sensor Reading """
+    """ Abstract Reading Class """
 
     def __init__(self, date, seq_num, sensor_name, lowest_temp, avg_temp, highest_temp, status):
         """ Initializes the sensor reading """
@@ -25,9 +31,9 @@ class AbstractReading:
         """ Getter for sequence number """
         return self._sequence_num
 
-    def set_sequence_num(self, sequence_num):
-        """"""
-        self._sequence_num = sequence_num
+    def set_sequence_num(self, new_sequence_num):
+        """ Setter for sequence number """
+        self._sequence_num = new_sequence_num
 
     def get_min_value(self):
         """ Getter for the minimum temperature """
@@ -50,10 +56,16 @@ class AbstractReading:
         return self._status
 
     def to_json(self):
-        reading_dict = {"timestamp": self._timestamp.strftime('%Y/%m/%d %H:%M'), "sensor_name": self._sensor_model,
-         "seq_num": self._sequence_num, "low_value": self._min,
-         "avg_value": self._avg, "max_value": self._max, "range": self.get_range(),
-         "status": self._status}
+        reading_dict = {
+            "timestamp": self._timestamp.strftime('%Y/%m/%d %H:%M'),
+            "sensor_name": self._sensor_model,
+            "seq_num": self._sequence_num,
+            "low_value": self._min,
+            "avg_value": self._avg,
+            "max_value": self._max,
+            "range": self.get_range(),
+            "status": self._status
+        }
         return json.dumps(reading_dict, indent=4)
 
     def is_error(self):
