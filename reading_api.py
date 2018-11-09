@@ -26,7 +26,7 @@ MIN_READING = "min_reading"
 AVG_READING = "avg_reading"
 MAX_READING = "max_reading"
 STATUS = "status"
-TEMP_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+TEMP_DATE_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 PRESS_DATE_FORMAT = "%Y-%m-%d %H:%M"
 
 
@@ -35,10 +35,8 @@ def add_reading(sensor_type):
     if sensor_type == "pressure":
         press_sensor = PressureReadingManager(press_results_file)
         json_reading = request.get_json()
-        temp_timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], PRESS_DATE_FORMAT)
-        new_reading = PressureReading(temp_timestamp, json_reading[SENSOR_NAME], DEFAULT_SEQ_NUM, json_reading[MIN_READING], json_reading[AVG_READING], json_reading[MAX_READING], json_reading[STATUS])
-        #reading_data = [json_reading['timestamp'], json_reading['sensor_name'], DEFAULT_SEQ_NUM, json_reading['low_reading'], json_reading['avg_reading'], json_reading['max_reading'], json_reading['status']]
-        #reading_object = press_sensor.convert_new_reading(reading_data)
+        timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], PRESS_DATE_FORMAT)
+        new_reading = PressureReading(timestamp, json_reading[SENSOR_NAME], DEFAULT_SEQ_NUM, json_reading[MIN_READING], json_reading[AVG_READING], json_reading[MAX_READING], json_reading[STATUS])
         press_sensor.add_reading(new_reading)
 
         response = app.response_class(
@@ -51,9 +49,11 @@ def add_reading(sensor_type):
     elif sensor_type == "temperature":
         temp_sensor = TemperatureReadingManager(temp_results_file)
         json_reading = request.get_json()
-        reading_data = [json_reading['timestamp'], DEFAULT_SEQ_NUM, json_reading['sensor_name'], json_reading['low_reading'], json_reading['avg_reading'], json_reading['max_reading'], json_reading['status']]
-        reading_object = temp_sensor.convert_new_reading(reading_data)
-        temp_sensor.add_reading(reading_object)
+        timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], TEMP_DATE_FORMAT)
+        new_reading = TemperatureReading(timestamp, DEFAULT_SEQ_NUM, json_reading[SENSOR_NAME],
+                                      json_reading[MIN_READING], json_reading[AVG_READING], json_reading[MAX_READING],
+                                      json_reading[STATUS])
+        temp_sensor.add_reading(new_reading)
 
         response = app.response_class(
             response='Reading added successfully',
@@ -68,13 +68,13 @@ def update_reading(sensor_type, seq_num):
     if sensor_type == "pressure":
         press_sensor = PressureReadingManager(press_results_file)
         json_reading = request.get_json()
-        reading_data = [json_reading['timestamp'], json_reading['sensor_name'], seq_num,
-                        json_reading['low_reading'], json_reading['avg_reading'], json_reading['max_reading'],
-                        json_reading['status']]
-        press_sensor.update_reading(reading_data)
+        timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], PRESS_DATE_FORMAT)
+        new_reading = PressureReading(timestamp, json_reading[SENSOR_NAME], seq_num, json_reading[MIN_READING],
+                                      json_reading[AVG_READING], json_reading[MAX_READING], json_reading[STATUS])
+        press_sensor.update_reading(new_reading)
 
         response = app.response_class(
-            response='Reading added successfully',
+            response='Reading updated successfully',
             status=200,
             mimetype='text/plain'
         )
@@ -83,13 +83,14 @@ def update_reading(sensor_type, seq_num):
     if sensor_type == "temperature":
         press_sensor = TemperatureReadingManager(temp_results_file)
         json_reading = request.get_json()
-        reading_data = [json_reading['timestamp'], json_reading['sensor_name'], seq_num,
-                        json_reading['low_reading'], json_reading['avg_reading'], json_reading['max_reading'],
-                        json_reading['status']]
-        press_sensor.update_reading(reading_data)
+        timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], TEMP_DATE_FORMAT)
+        new_reading = TemperatureReading(timestamp, seq_num, json_reading[SENSOR_NAME],
+                                         json_reading[MIN_READING], json_reading[AVG_READING],
+                                         json_reading[MAX_READING], json_reading[STATUS])
+        press_sensor.update_reading(new_reading)
 
         response = app.response_class(
-            response='Reading added successfully',
+            response='Reading updated successfully',
             status=200,
             mimetype='text/plain'
         )
