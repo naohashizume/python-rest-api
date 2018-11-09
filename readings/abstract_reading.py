@@ -60,7 +60,7 @@ class AbstractReading:
             "timestamp": self._timestamp.strftime('%Y/%m/%d %H:%M'),
             "sensor_name": self._sensor_model,
             "seq_num": self._sequence_num,
-            "low_value": self._min,
+            "low_value": self._min, #change to min_value
             "avg_value": self._avg,
             "max_value": self._max,
             "range": self.get_range(),
