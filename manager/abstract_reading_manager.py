@@ -63,8 +63,7 @@ class AbstractReadingManager:
         reading_list = []
         for reading in self._sensor_readings:
             reading_list.append(self._reading_to_dict(reading))
-        #reading_list_json = self._to_json(reading_list)
-        #return reading_list_json
+        return reading_list
 
     def convert_new_reading(self, reading_list):
         """"""

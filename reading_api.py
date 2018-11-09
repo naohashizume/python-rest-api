@@ -126,7 +126,9 @@ def get_reading(sensor_type, seq_num):
 def get_all_readings(sensor_type):
     if sensor_type == "pressure":
         press_sensor = PressureReadingManager(press_results_file)
-        json_readings = press_sensor.get_all_readings()
+        readings_list = press_sensor.get_all_readings()
+        print(readings_list)
+        json_readings = json.dumps(readings_list)
         response = app.response_class(
             response=json_readings,
             status=200,
@@ -136,7 +138,8 @@ def get_all_readings(sensor_type):
 
     elif sensor_type == "temperature":
         temp_sensor = TemperatureReadingManager(temp_results_file)
-        json_readings = temp_sensor.get_all_readings()
+        readings_list = temp_sensor.get_all_readings()
+        json_readings = json.dumps(readings_list)
         response = app.response_class(
             response=json_readings,
             status=200,
