@@ -1,3 +1,9 @@
+#
+# Authors: Matt Harrison, Nao Hashizume, Set 2B
+#
+# test_temperature_reading_manager.py
+#
+
 from manager.temperature_reading_manager import TemperatureReadingManager
 from readings.temperature_reading import TemperatureReading
 
