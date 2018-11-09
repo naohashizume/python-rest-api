@@ -37,9 +37,8 @@ class AbstractReadingManager:
 
         return new_reading
 
-    def update_reading(self, reading_data):
+    def update_reading(self, new_reading):
         """ Update reading"""
-        new_reading = self._load_reading_row(reading_data)
         for i, reading in enumerate(self._sensor_readings):
             if reading.get_sequence_num() == new_reading.get_sequence_num():
                 self._sensor_readings[i] = new_reading
