@@ -34,7 +34,7 @@ class AbstractReadingManager:
             self._sensor_readings.append(new_reading)
             self._write_readings_to_file()
         else:
-            new_reading.set_sequence_num(self._latest_sequence_num)
+            new_reading.set_sequence_num(self._latest_sequence_num + 1)
             self._sensor_readings.append(new_reading)
             self._write_readings_to_file()
 
