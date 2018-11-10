@@ -11,11 +11,15 @@ import json
 
 class AbstractReadingManager:
     """ Abstract Reading Manager Class """
+
+    # Constants
     FILE_NAME_STR = "File name"
+    NEW_READING = "New Reading"
+    SEQ_NUM = "Sequence Number"
 
     def __init__(self, filename):
         """ Initializes the abstract reading manager """
-        AbstractReadingManager._validate_string_input(AbstractReadingManager.FILE_NAME_STR, filename)
+        AbstractReadingManager._validate_input_value(AbstractReadingManager.FILE_NAME_STR, filename)
         self._filename = filename
         self._latest_sequence_num = 0
         self._sensor_readings = []
@@ -23,8 +27,7 @@ class AbstractReadingManager:
 
     def add_reading(self, new_reading):
         """ Add reading """
-        # need to validate reading
-        # Assign a sequence number when a new reading is added
+        AbstractReadingManager._validate_input_value(AbstractReadingManager.NEW_READING, new_reading)
         if (len(self._sensor_readings) != 0):
             self._latest_sequence_num = self._sensor_readings[-1].get_sequence_num() + 1
             new_reading.set_sequence_num(self._latest_sequence_num)
@@ -39,6 +42,7 @@ class AbstractReadingManager:
 
     def update_reading(self, new_reading):
         """ Update reading"""
+        AbstractReadingManager._validate_input_value(AbstractReadingManager.NEW_READING, new_reading)
         for i, reading in enumerate(self._sensor_readings):
             if reading.get_sequence_num() == new_reading.get_sequence_num():
                 self._sensor_readings[i] = new_reading
@@ -46,14 +50,16 @@ class AbstractReadingManager:
 
     def delete_reading(self, seq_num):
         """ Delete reading """
+        AbstractReadingManager._validate_int_value(AbstractReadingManager.SEQ_NUM, seq_num)
         for reading in self._sensor_readings:
             if reading.get_sequence_num() == seq_num:
                 self._sensor_readings.remove(reading)
 
-        self._write_readings_to_file()
+            self._write_readings_to_file()
 
     def get_reading(self, seq_num):
         """Searches _sensor_readings by sequence number and returns the matching AbstractReading object"""
+        AbstractReadingManager._validate_int_value(AbstractReadingManager.SEQ_NUM, seq_num)
         for reading in self._sensor_readings:
             if reading.get_sequence_num() == int(seq_num):
                 return reading
@@ -65,14 +71,8 @@ class AbstractReadingManager:
             reading_list.append(self._reading_to_dict(reading))
         return reading_list
 
-    def convert_new_reading(self, reading_list):
-        """"""
-        return self._load_reading_row(reading_list)
-
-
     def _read_reading_from_file(self):
         """Loads a new readings file into the sensor readings list. Rejects duplicate sequence numbers."""
-        #AbstractSensor._validate_string_input(AbstractSensor.FILE_PATH_STR, filepath)
 
         with open(self._filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
@@ -87,7 +87,7 @@ class AbstractReadingManager:
     def _write_readings_to_file(self):
         """ Write readings to a csv file """
         with open(self._filename, 'w', newline="") as csv_file:
-            csv_writer = csv.writer(csv_file)  # lineterminator='\n'
+            csv_writer = csv.writer(csv_file)
             for reading in self._sensor_readings:
                 csv_from_reading = self._write_reading_row(reading)
                 csv_writer.writerow(csv_from_reading)
@@ -108,10 +108,23 @@ class AbstractReadingManager:
         raise NotImplementedError("Child class must implement abstract class")
 
     @staticmethod
-    def _validate_string_input(display_name, str_value):
+    def _validate_input_value(display_name, inp_value):
         """ Private helper to validate string values """
-        if str_value is None:
+        if inp_value is None:
             raise ValueError(display_name + " cannot be undefined.")
 
-        if str_value == "":
+        if inp_value == "":
             raise ValueError(display_name + " cannot be empty.")
+
+    @staticmethod
+    def _validate_int_value(display_name, int_value):
+        """ Private helper to validate string values """
+        if int_value is None:
+            raise ValueError(display_name + " cannot be undefined.")
+
+        if int_value == "":
+            raise ValueError(display_name + " cannot be empty.")
+
+        if not isinstance(int_value, int):
+            raise ValueError(display_name + " must be integer.")
+
