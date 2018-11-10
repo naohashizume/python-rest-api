@@ -29,9 +29,12 @@ STATUS = "status"
 TEMP_DATE_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 PRESS_DATE_FORMAT = "%Y-%m-%d %H:%M"
 
+SUCCESS_RESPONSE_CODE = 200
+FAILURE_RESPONSE_CODE = 400
 
 @app.route('/sensor/<string:sensor_type>/reading', methods=['POST'])
 def add_reading(sensor_type):
+    """"""
     if sensor_type == "temperature":
         temp_sensor = TemperatureReadingManager(temp_results_file)
         json_reading = request.get_json()
@@ -42,7 +45,7 @@ def add_reading(sensor_type):
         temp_sensor.add_reading(new_reading)
         response = app.response_class(
             response='Reading added successfully',
-            status=200,
+            status=SUCCESS_RESPONSE_CODE,
             mimetype='text/plain'
         )
         return response
@@ -55,8 +58,16 @@ def add_reading(sensor_type):
         press_sensor.add_reading(new_reading)
         response = app.response_class(
             response='Reading added successfully',
-            status=200,
+            status=SUCCESS_RESPONSE_CODE,
             mimetype='text/plain'
+        )
+        return response
+
+    else:
+        response = app.response_class(
+            response="Bad Request",
+            status=FAILURE_RESPONSE_CODE,
+            mimetype='application/json'
         )
         return response
 
@@ -72,7 +83,7 @@ def update_reading(sensor_type, seq_num):
         press_sensor.update_reading(new_reading)
         response = app.response_class(
             response='Reading updated successfully',
-            status=200,
+            status=SUCCESS_RESPONSE_CODE,
             mimetype='text/plain'
         )
         return response
@@ -86,8 +97,16 @@ def update_reading(sensor_type, seq_num):
         press_sensor.update_reading(new_reading)
         response = app.response_class(
             response='Reading updated successfully',
-            status=200,
+            status=SUCCESS_RESPONSE_CODE,
             mimetype='text/plain'
+        )
+        return response
+
+    else:
+        response = app.response_class(
+            response="Bad Request",
+            status=FAILURE_RESPONSE_CODE,
+            mimetype='application/json'
         )
         return response
 
@@ -99,7 +118,7 @@ def get_reading(sensor_type, seq_num):
         json_reading = reading.to_json()
         response = app.response_class(
             response=json_reading,
-            status=200,
+            status=SUCCESS_RESPONSE_CODE,
             mimetype='application/json'
         )
         return response
@@ -110,10 +129,18 @@ def get_reading(sensor_type, seq_num):
         json_reading = reading.to_json()
         response = app.response_class(
             response=json_reading,
-            status=200,
+            status=SUCCESS_RESPONSE_CODE,
             mimetype='application/json'
         )
         return response
+
+    else:
+        response = app.response_class(
+        response="Bad Request",
+        status=FAILURE_RESPONSE_CODE,
+        mimetype='application/json'
+        )
+    return response
 
 @app.route('/sensor/<string:sensor_type>/reading/all', methods=['GET'])
 def get_all_readings(sensor_type):
@@ -135,7 +162,15 @@ def get_all_readings(sensor_type):
         json_readings = json.dumps(readings_list)
         response = app.response_class(
             response=json_readings,
-            status=200,
+            status=SUCCESS_RESPONSE_CODE,
+            mimetype='application/json'
+        )
+        return response
+
+    else:
+        response = app.response_class(
+            response="Bad Request",
+            status=FAILURE_RESPONSE_CODE,
             mimetype='application/json'
         )
         return response
@@ -147,7 +182,7 @@ def sensor_delete_reading(sensor_type, seq_num):
         json_string = temp_sensor.delete_reading(seq_num)
         response = app.response_class(
             response=json_string,
-            status=200,
+            status=SUCCESS_RESPONSE_CODE,
             mimetype='application/json'
         )
         return response
@@ -157,7 +192,15 @@ def sensor_delete_reading(sensor_type, seq_num):
         json_string = press_sensor.delete_reading(seq_num)
         response = app.response_class(
             response=json_string,
-            status=200,
+            status=SUCCESS_RESPONSE_CODE,
+            mimetype='application/json'
+        )
+        return response
+
+    else:
+        response = app.response_class(
+            response="Bad Request",
+            status=FAILURE_RESPONSE_CODE,
             mimetype='application/json'
         )
         return response

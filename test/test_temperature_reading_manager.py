@@ -5,7 +5,6 @@
 #
 
 from manager.temperature_reading_manager import TemperatureReadingManager
-from manager.pressure_reading_manager import AbstractReadingManager
 from readings.temperature_reading import TemperatureReading
 
 from unittest import TestCase
@@ -29,8 +28,8 @@ class TestTemperatureReadingManager(TestCase):
     def setUp(self):
         """ Called once, before any tests """
         csv.reader = MagicMock(return_value=TestTemperatureReadingManager.TEST_TEMP_READINGS)
-        self.temp_sensor = TemperatureReadingManager("test_results.csv")
         csv.writer = MagicMock()
+        self.temp_sensor = TemperatureReadingManager("test_results.csv")
         self.logPoint()
 
     def tearDown(self):
@@ -43,18 +42,23 @@ class TestTemperatureReadingManager(TestCase):
         callingFunction = inspect.stack()[1][3]
         print('in %s - %s()' % (currentTest, callingFunction))
 
+    @patch('builtins.open', mock_open(read_data='1'))
     def test_init_valid(self):
         """ 010A - Valid Construction Parameters """
         self.assertIsNotNone(self.temp_sensor)
 
+    @patch('builtins.open', mock_open(read_data='1'))
     def test_init_invalid(self):
         """ 010B - Invalid Construction Parameters"""
         with self.assertRaises(ValueError):
             self.temp_sensor = TemperatureReadingManager(None)
             self.temp_sensor = TestTemperatureReadingManager("")
 
+    @patch('builtins.open', mock_open(read_data='1'))
     def test_add_reading_valid(self):
         """ 020A - Valid Add Reading """
+        csv.reader = MagicMock(return_value=TestTemperatureReadingManager.TEST_TEMP_READINGS)
+        csv.writer = MagicMock()
         new_reading = TemperatureReading(datetime.datetime.strptime("2018-09-23 19:59:01.873", "%Y-%m-%d %H:%M:%S.%f"),
                                          int(1),
                                          "ABC Sensor Temp M301A",
@@ -66,14 +70,20 @@ class TestTemperatureReadingManager(TestCase):
         self.assertEqual(len(self.temp_sensor.get_all_readings()), 4)
         self.assertIsInstance(added_reading, TemperatureReading)
 
+    @patch('builtins.open', mock_open(read_data='1'))
     def test_add_reading_invalid(self):
         """ 020B - Invalid Add Reading """
+        csv.reader = MagicMock(return_value=TestTemperatureReadingManager.TEST_TEMP_READINGS)
+        csv.writer = MagicMock()
         with self.assertRaises(ValueError):
             self.temp_sensor.add_reading(None)
             self.temp_sensor.add_reading("")
 
+    @patch('builtins.open', mock_open(read_data='1'))
     def test_update_reading_valid(self):
         """ 030A - Valid Update Reading """
+        csv.reader = MagicMock(return_value=TestTemperatureReadingManager.TEST_TEMP_READINGS)
+        csv.writer = MagicMock()
         new_reading = TemperatureReading(datetime.datetime.strptime("2018-09-23 19:59:01.873", "%Y-%m-%d %H:%M:%S.%f"),
                                          int(2),
                                          "ABC Sensor Temp M301A",
@@ -85,36 +95,50 @@ class TestTemperatureReadingManager(TestCase):
         updated_reading = self.temp_sensor.get_reading(2)
         self.assertEqual(new_reading, updated_reading)
 
+    @patch('builtins.open', mock_open(read_data='1'))
     def test_update_reading_invalid(self):
         """ 030B - Invalid Update Reading """
+        csv.reader = MagicMock(return_value=TestTemperatureReadingManager.TEST_TEMP_READINGS)
+        csv.writer = MagicMock()
         with self.assertRaises(ValueError):
             self.temp_sensor.update_reading(None)
             self.temp_sensor.update_reading("")
 
+    @patch('builtins.open', mock_open(read_data='1'))
     def test_delete_reading_valid(self):
         """ 040A - Valid Delete Reading """
+        csv.reader = MagicMock(return_value=TestTemperatureReadingManager.TEST_TEMP_READINGS)
+        csv.writer = MagicMock()
         self.temp_sensor.delete_reading(1)
         self.assertEqual(len(self.temp_sensor.get_all_readings()), 2)
 
+    @patch('builtins.open', mock_open(read_data='1'))
     def test_delete_reading_invalid(self):
         """ 040B - Invalid Delete Reading """
+        csv.reader = MagicMock(return_value=TestTemperatureReadingManager.TEST_TEMP_READINGS)
+        csv.writer = MagicMock()
         with self.assertRaises(ValueError):
             self.temp_sensor.delete_reading(None)
             self.temp_sensor.delete_reading("")
             self.temp_sensor.delete_reading(str(1))
 
+    @patch('builtins.open', mock_open(read_data='1'))
     def test_get_reading_valid(self):
         """ 050A - Valid Get Reading """
+        csv.reader = MagicMock(return_value=TestTemperatureReadingManager.TEST_TEMP_READINGS)
         get_reading = self.temp_sensor.get_reading(1)
         self.assertIsInstance(get_reading, TemperatureReading)
 
+    @patch('builtins.open', mock_open(read_data='1'))
     def test_get_reading_invalid(self):
         """ 050B - Invalid Get Reading """
+        csv.reader = MagicMock(return_value=TestTemperatureReadingManager.TEST_TEMP_READINGS)
         with self.assertRaises(ValueError):
             self.temp_sensor.get_reading(None)
             self.temp_sensor.get_reading("")
             self.temp_sensor.get_reading(str(1))
 
+    @patch('builtins.open', mock_open(read_data='1'))
     def test_get_all_readings_valid(self):
         """ 060A - Valid Get All Readings """
         self.assertEqual(len(self.temp_sensor.get_all_readings()), 3)
