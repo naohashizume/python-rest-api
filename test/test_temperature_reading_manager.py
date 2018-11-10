@@ -5,7 +5,7 @@
 #
 
 from manager.temperature_reading_manager import TemperatureReadingManager
-from manager.pressure_reading_manager import PressureReadingManager
+from manager.pressure_reading_manager import AbstractReadingManager
 from readings.temperature_reading import TemperatureReading
 
 from unittest import TestCase
@@ -71,7 +71,6 @@ class TestTemperatureReadingManager(TestCase):
         with self.assertRaises(ValueError):
             self.temp_sensor.add_reading(None)
             self.temp_sensor.add_reading("")
-        pass
 
     def test_update_reading_valid(self):
         """ 030A - Valid Update Reading """
