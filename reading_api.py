@@ -71,7 +71,7 @@ def add_reading(sensor_type):
                 mimetype='application/json'
             )
             return response
-    except KeyError:
+    except (KeyError, ValueError):
         response = app.response_class(
             response="Bad Request",
             status=FAILURE_RESPONSE_CODE,
@@ -120,7 +120,7 @@ def update_reading(sensor_type, seq_num):
             )
             return response
 
-    except(AttributeError, KeyError):
+    except(AttributeError, KeyError, ValueError):
         response = app.response_class(
             response="Bad Request",
             status=FAILURE_RESPONSE_CODE,
@@ -204,7 +204,7 @@ def get_all_readings(sensor_type):
         return response
 
 @app.route('/sensor/<string:sensor_type>/reading/<int:seq_num>', methods=['DELETE'])
-def sensor_delete_reading(sensor_type, seq_num):
+def delete_reading(sensor_type, seq_num):
     """API call to delete a reading from the reading manager using sequence number"""
     try:
         if sensor_type == "temperature":
