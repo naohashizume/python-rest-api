@@ -42,7 +42,7 @@ class PressureReadingManager(AbstractReadingManager):
         return pressure_reading
 
     def _write_reading_row(self, pressure_reading):
-        """ Convert reading string and Returns reading list"""
+        """ Prepares a pressure reading to be written to the csv file """
         pres_reading_list = [
                               pressure_reading.get_timestamp().strftime("%Y-%m-%d %H:%M"),
                               pressure_reading.get_sensor_model(),

@@ -40,7 +40,7 @@ class TemperatureReadingManager(AbstractReadingManager):
         return temp_reading
 
     def _write_reading_row(self, temp_reading):
-        """ Write reading to csv file  """
+        """ Prepares a temperature reading to be written to the csv file """
         temp_reading_list = [temp_reading.get_timestamp().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
                              temp_reading.get_sequence_num(),
                              temp_reading.get_sensor_model(),

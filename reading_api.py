@@ -34,7 +34,7 @@ FAILURE_RESPONSE_CODE = 400
 
 @app.route('/sensor/<string:sensor_type>/reading', methods=['POST'])
 def add_reading(sensor_type):
-    """"""
+    """API call to add a new sensor reading to the reading manager"""
     if sensor_type == "temperature":
         temp_sensor = TemperatureReadingManager(temp_results_file)
         json_reading = request.get_json()
@@ -73,6 +73,7 @@ def add_reading(sensor_type):
 
 @app.route('/sensor/<string:sensor_type>/reading/<int:seq_num>', methods=['PUT'])
 def update_reading(sensor_type, seq_num):
+    """API call to update a reading in the reading manager"""
     if sensor_type == "temperature":
         press_sensor = TemperatureReadingManager(temp_results_file)
         json_reading = request.get_json()
@@ -112,6 +113,7 @@ def update_reading(sensor_type, seq_num):
 
 @app.route('/sensor/<string:sensor_type>/reading/<int:seq_num>', methods=['GET'])
 def get_reading(sensor_type, seq_num):
+    """API call to retrieve a reading from the reading manager using sequence number"""
     if sensor_type == "temperature":
         temp_sensor = TemperatureReadingManager(temp_results_file)
         reading = temp_sensor.get_reading(seq_num)
@@ -144,6 +146,7 @@ def get_reading(sensor_type, seq_num):
 
 @app.route('/sensor/<string:sensor_type>/reading/all', methods=['GET'])
 def get_all_readings(sensor_type):
+    """API call to retrieve all readings from the reading manager"""
     if sensor_type == "temperature":
         temp_sensor = TemperatureReadingManager(temp_results_file)
         readings_list = temp_sensor.get_all_readings()
@@ -177,6 +180,7 @@ def get_all_readings(sensor_type):
 
 @app.route('/sensor/<string:sensor_type>/reading/<int:seq_num>', methods=['DELETE'])
 def sensor_delete_reading(sensor_type, seq_num):
+    """API call to delete a reading from the reading manager using sequence number"""
     if sensor_type == "temperature":
         temp_sensor = TemperatureReadingManager(temp_results_file)
         json_string = temp_sensor.delete_reading(seq_num)

@@ -56,6 +56,7 @@ class AbstractReading:
         return self._status
 
     def to_json(self):
+        """Returns reading as JSON"""
         reading_dict = {
             "timestamp": self._timestamp.strftime('%Y/%m/%d %H:%M'),
             "sensor_name": self._sensor_model,
