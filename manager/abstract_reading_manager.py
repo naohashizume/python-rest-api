@@ -41,21 +41,25 @@ class AbstractReadingManager:
         return new_reading
 
     def update_reading(self, new_reading):
-        """ Replaces the reading in the sensor readings list matching the new reading's sequence number"""
+        """ Replaces the reading in the sensor readings list matching the new reading's sequence number. Raise
+        AttributeError if match not found. """
         AbstractReadingManager._validate_input_value(AbstractReadingManager.NEW_READING, new_reading)
         for i, reading in enumerate(self._sensor_readings):
             if reading.get_sequence_num() == new_reading.get_sequence_num():
                 self._sensor_readings[i] = new_reading
                 self._write_readings_to_file()
+                return
+        raise AttributeError
 
     def delete_reading(self, seq_num):
-        """ Delete reading """
+        """ Search for reading by sequence number and delete if match found. Raise AttributeError if match not found."""
         AbstractReadingManager._validate_int_value(AbstractReadingManager.SEQ_NUM, seq_num)
         for reading in self._sensor_readings:
             if reading.get_sequence_num() == seq_num:
                 self._sensor_readings.remove(reading)
-
-            self._write_readings_to_file()
+                self._write_readings_to_file()
+                return
+        raise AttributeError
 
     def get_reading(self, seq_num):
         """Searches _sensor_readings by sequence number and returns the matching AbstractReading object"""
