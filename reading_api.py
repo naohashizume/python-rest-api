@@ -185,7 +185,7 @@ def sensor_delete_reading(sensor_type, seq_num):
         temp_sensor = TemperatureReadingManager(temp_results_file)
         json_string = temp_sensor.delete_reading(seq_num)
         response = app.response_class(
-            response=json_string,
+            response='Reading deleted successfully',
             status=SUCCESS_RESPONSE_CODE,
             mimetype='application/json'
         )
@@ -195,7 +195,7 @@ def sensor_delete_reading(sensor_type, seq_num):
         press_sensor = PressureReadingManager(press_results_file)
         json_string = press_sensor.delete_reading(seq_num)
         response = app.response_class(
-            response=json_string,
+            response='Reading deleted successfully',
             status=SUCCESS_RESPONSE_CODE,
             mimetype='application/json'
         )
