@@ -30,5 +30,5 @@ if __name__ == "__main__":
     root = tk.Tk()
     main = MainAppController(root)
     main.pack(side="top", fill="both", expand=True)
-    root.wm_geometry("700x600")
+    root.wm_geometry("750x500")
     root.mainloop()

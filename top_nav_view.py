@@ -26,4 +26,4 @@ class TopNavView(tk.Frame):
         # radio button for pressure sensor
         tk.Radiobutton(self,
                        text="pressure",
-                       value=2).place(x=400, y=10)
+                       value=2).place(x=450, y=10)

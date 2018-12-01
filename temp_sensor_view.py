@@ -38,7 +38,7 @@ class TemperatureSensorView(tk.Frame):
         self.displayReadings.column("timestamp",anchor="center", width=100)
         self.displayReadings.heading("timestamp", text="Timestamp")
         # treeview - model column
-        self.displayReadings.column("model", anchor="center", width=110)
+        self.displayReadings.column("model", anchor="center", width=150)
         self.displayReadings.heading("model", text="Model")
         # treeview - min_reading column
         self.displayReadings.column("min_reading", anchor="center", width=100)
@@ -61,7 +61,7 @@ class TemperatureSensorView(tk.Frame):
         self.displayReadings.insert("", "end",
                                     values=[len(self.displayReadings.get_children("")) + 1,
                                             datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp",
+                                            "ABC Sensor Temp M301A",
                                             20.152,
                                             21.367,
                                             22.005,
