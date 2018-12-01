@@ -11,42 +11,96 @@ from readings.temperature_reading import TemperatureReading
 class TemperatureReadingManager(AbstractReadingManager):
     """ Temperature Sensor concrete implementation """
 
-    # CONSTANTS
-    DATETIME_INDEX = 0
-    SEQ_NUM_INDEX = 1
-    SENSOR_NAME_INDEX = 2
-    LOW_INDEX = 3
-    AVG_INDEX = 4
-    HIGH_INDEX = 5
-    STATUS_INDEX = 6
+    DATE_FORMAT = "%Y-%m-%d %H:%M"
 
-    def __init__(self, filename):
+    def __init__(self, db_name):
         """ Constructor for PressureSensor Class """
-        super().__init__(filename)
+        super().__init__(db_name)
 
-    def _load_reading_row(self, row):
-        """ Loads list into a TemperatureReading object """
 
-        reading_datetime = datetime.datetime.strptime(row[TemperatureReadingManager.DATETIME_INDEX], "%Y-%m-%d %H:%M:%S.%f")
+    def get_reading(self, id):
+        session = self.DBSession()
+        reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
+        if reading is not None:
+            return reading
+        else:
+            return None
 
-        temp_reading =  TemperatureReading(reading_datetime,
-                                           int(row[TemperatureReadingManager.SEQ_NUM_INDEX]),
-                                           row[TemperatureReadingManager.SENSOR_NAME_INDEX],
-                                           float(row[TemperatureReadingManager.LOW_INDEX]),
-                                           float(row[TemperatureReadingManager.AVG_INDEX]),
-                                           float(row[TemperatureReadingManager.HIGH_INDEX]),
-                                           row[TemperatureReadingManager.STATUS_INDEX])
+    def get_all_readings(self):
+        session = self.DBSession()
+        readings = session.query(TemperatureReading).all()
+        if readings is not None:
+            dict_list = []
+            for reading in readings:
+                dict_list.append(reading.to_dict())
+            return dict_list
+        else:
+            return None
 
-        return temp_reading
 
-    def _write_reading_row(self, temp_reading):
-        """ Prepares a temperature reading to be written to the csv file """
-        temp_reading_list = [temp_reading.get_timestamp().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
-                             temp_reading.get_sequence_num(),
-                             temp_reading.get_sensor_model(),
-                             temp_reading.get_min_value(),
-                             temp_reading.get_avg_value(),
-                             temp_reading.get_max_value(),
-                             temp_reading.get_status()]
+    def delete_reading(self, id):
+        session = self.DBSession()
+        del_reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
+        if del_reading is not None:
+            session.delete(del_reading)
+            session.commit()
+            return True
+        else:
+            return False
 
-        return temp_reading_list
+
+    def update_reading(self, id, new_reading):
+        session = self.DBSession()
+        update_reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
+
+        if update_reading is not None:
+            new_reading_dict = new_reading.to_dict()
+            update_reading.timestamp = datetime.datetime.strptime(new_reading_dict["timestamp"], TemperatureReadingManager.DATE_FORMAT)
+            update_reading.model = new_reading_dict["model"]
+            update_reading.min_reading = new_reading_dict["min_reading"]
+            update_reading.avg_reading = new_reading_dict["avg_reading"]
+            update_reading.max_reading = new_reading_dict["max_reading"]
+            update_reading.status = new_reading_dict["status"]
+            session.commit()
+            return True
+        else:
+            return False
+
+
+
+    # # CONSTANTS
+    # DATETIME_INDEX = 0
+    # SEQ_NUM_INDEX = 1
+    # SENSOR_NAME_INDEX = 2
+    # LOW_INDEX = 3
+    # AVG_INDEX = 4
+    # HIGH_INDEX = 5
+    # STATUS_INDEX = 6
+    #
+    #
+    # def _load_reading_row(self, row):
+    #     """ Loads list into a TemperatureReading object """
+    #
+    #     reading_datetime = datetime.datetime.strptime(row[TemperatureReadingManager.DATETIME_INDEX], "%Y-%m-%d %H:%M:%S.%f")
+    #
+    #     temp_reading =  TemperatureReading(reading_datetime,
+    #                                        int(row[TemperatureReadingManager.SEQ_NUM_INDEX]),
+    #                                        row[TemperatureReadingManager.SENSOR_NAME_INDEX],
+    #                                        float(row[TemperatureReadingManager.LOW_INDEX]),
+    #                                        float(row[TemperatureReadingManager.AVG_INDEX]),
+    #                                        float(row[TemperatureReadingManager.HIGH_INDEX]),
+    #                                        row[TemperatureReadingManager.STATUS_INDEX])
+    #
+    #     return temp_reading
+    #
+    # def _write_reading_row(self, temp_reading):
+    #     """ Prepares a temperature reading to be written to the csv file """
+    #     temp_reading_list = [temp_reading.get_timestamp().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3],
+    #                          temp_reading.get_sequence_num(),
+    #                          temp_reading.get_sensor_model(),
+    #                          temp_reading.get_min_value(),
+    #                          temp_reading.get_avg_value(),
+    #                          temp_reading.get_max_value(),
+    #                          temp_reading.get_status()]
+    #
+    #     return temp_reading_list

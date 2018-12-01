@@ -1,0 +1,6 @@
+data/
+manager/__pycache__/
+readings/__pycache__/
+.idea/
+__pycache__/
+readings.sqlite
