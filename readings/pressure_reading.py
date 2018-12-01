@@ -15,12 +15,13 @@ class PressureReading(AbstractReading, Base):
 
     def __init__(self, date, model, min_reading, avg_reading, max_reading, status):
         """ Initializes the pressure sensor reading """
-        self.timestamp = date
-        self.model = model
-        self.min_reading = min_reading
-        self.avg_reading = avg_reading
-        self.max_reading = max_reading
-        self.status = status
+        super().__init__(date, model, min_reading, avg_reading, max_reading, status)
+        # self.timestamp = date
+        # self.model = model
+        # self.min_reading = min_reading
+        # self.avg_reading = avg_reading
+        # self.max_reading = max_reading
+        # self.status = status
 
 
 
