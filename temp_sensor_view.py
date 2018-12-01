@@ -8,21 +8,32 @@ import tkinter as tk
 import tkinter.ttk
 import datetime
 
-
-class TemperatureSensorView(tk.Frame):
+class TempSensorView(tk.Frame):
     """ TODO: Explain about this file """
-    def __init__(self, *args, **kwargs):
-        tk.Frame.__init__(self, *args, **kwargs)
+
+    def __init__(self, parent, page_callback):
+        """ Initialize Temperature Sensor Page  """
+        tk.Frame.__init__(self, parent)
+        self._parent = parent
+
+        self._page_callback = page_callback
+
+        self._create_widgets()
+
+    def _create_widgets(self):
+        """ Creates the widgets for Temperature Sensor Page """
+
         # title of readings
         self.label_title = tk.Label(self, text="Temperature Sensor Readings")
         self.label_title.pack()
 
-        # treeview
+        # treeview - style
         self.style = tkinter.ttk.Style()
         self.style.configure("style.Treeview", hightlightthickness=0, bd=0)
-        self.style.configure("style.Treeview.Heading", font=("Calibri", 11,"bold"))
+        self.style.configure("style.Treeview.Heading", font=("Calibri", 11, "bold"))
 
-        self.displayReadings= tkinter.ttk.Treeview(self, style="style.Treeview")
+        # treeview
+        self.displayReadings = tkinter.ttk.Treeview(self, style="style.Treeview")
         self.displayReadings["columns"] = ("id",
                                            "timestamp",
                                            "model",
@@ -31,11 +42,12 @@ class TemperatureSensorView(tk.Frame):
                                            "max_reading",
                                            "status")
         self.displayReadings["show"] = "headings"
+
         # treeview - id column
         self.displayReadings.column("id", anchor="center", width=50)
         self.displayReadings.heading("id", anchor="center", text="Id")
         # treeview - timestamp column
-        self.displayReadings.column("timestamp",anchor="center", width=100)
+        self.displayReadings.column("timestamp", anchor="center", width=100)
         self.displayReadings.heading("timestamp", text="Timestamp")
         # treeview - model column
         self.displayReadings.column("model", anchor="center", width=150)
@@ -52,11 +64,32 @@ class TemperatureSensorView(tk.Frame):
         # treeview - status column
         self.displayReadings.column("status", anchor="center", width=100)
         self.displayReadings.heading("status", text="status")
+        # treeview - position
+        self.displayReadings.pack(side="left")
 
-        self.displayReadings.pack(pady=15)
+        # treeview - scroll bar
+        self.scrollbar = tkinter.ttk.Scrollbar(self, orient="vertical", command=self.displayReadings.yview)
+        self.scrollbar.pack(side="right", fill="y")
 
-        self.addButton = tkinter.Button(self, text="Add", width=15)
+        self.displayReadings.configure(yscrollcommand=self.scrollbar.set)
 
+        # treeview - insert data
+        self.displayReadings.insert("", "end",
+                                    values=[len(self.displayReadings.get_children("")) + 1,
+                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                                            "ABC Sensor Temp M301A",
+                                            20.152,
+                                            21.367,
+                                            22.005,
+                                            "OK"])
+        self.displayReadings.insert("", "end",
+                                    values=[len(self.displayReadings.get_children("")) + 1,
+                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                                            "ABC Sensor Temp M301A",
+                                            20.152,
+                                            21.367,
+                                            22.005,
+                                            "OK"])
 
         self.displayReadings.insert("", "end",
                                     values=[len(self.displayReadings.get_children("")) + 1,
@@ -66,5 +99,80 @@ class TemperatureSensorView(tk.Frame):
                                             21.367,
                                             22.005,
                                             "OK"])
+
+        self.displayReadings.insert("", "end",
+                                    values=[len(self.displayReadings.get_children("")) + 1,
+                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                                            "ABC Sensor Temp M301A",
+                                            20.152,
+                                            21.367,
+                                            22.005,
+                                            "OK"])
+
+        self.displayReadings.insert("", "end",
+                                    values=[len(self.displayReadings.get_children("")) + 1,
+                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                                            "ABC Sensor Temp M301A",
+                                            20.152,
+                                            21.367,
+                                            22.005,
+                                            "OK"])
+
+        self.displayReadings.insert("", "end",
+                                    values=[len(self.displayReadings.get_children("")) + 1,
+                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                                            "ABC Sensor Temp M301A",
+                                            20.152,
+                                            21.367,
+                                            22.005,
+                                            "OK"])
+
+        self.displayReadings.insert("", "end",
+                                    values=[len(self.displayReadings.get_children("")) + 1,
+                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                                            "ABC Sensor Temp M301A",
+                                            20.152,
+                                            21.367,
+                                            22.005,
+                                            "OK"])
+
+        self.displayReadings.insert("", "end",
+                                    values=[len(self.displayReadings.get_children("")) + 1,
+                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                                            "ABC Sensor Temp M301A",
+                                            20.152,
+                                            21.367,
+                                            22.005,
+                                            "OK"])
+
+        self.displayReadings.insert("", "end",
+                                    values=[len(self.displayReadings.get_children("")) + 1,
+                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                                            "ABC Sensor Temp M301A",
+                                            20.152,
+                                            21.367,
+                                            22.005,
+                                            "OK"])
+        self.displayReadings.insert("", "end",
+                                    values=[len(self.displayReadings.get_children("")) + 1,
+                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                                            "ABC Sensor Temp M301A",
+                                            20.152,
+                                            21.367,
+                                            22.005,
+                                            "OK"])
+
+        self.displayReadings.insert("", "end",
+                                    values=[len(self.displayReadings.get_children("")) + 1,
+                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                                            "ABC Sensor Temp M301A",
+                                            20.152,
+                                            21.367,
+                                            22.005,
+                                            "OK"])
+
+
+
+
 
 
