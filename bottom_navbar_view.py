@@ -5,9 +5,15 @@
 # Author:  Nao Hashizume, Matt Harrison Set 2B
 
 import tkinter as tk
+from manager.temperature_reading_manager import TemperatureReadingManager
+from manager.pressure_reading_manager import PressureReadingManager
 
 class BottomNavbarView(tk.Frame):
     """ Bottom Navigation Bar """
+
+    TEMP_PAGE = 1
+    PRES_PAGE = 2
+    db_name = "sqlite:///readings.sqlite"
 
     def __init__(self, parent, page_popup_callback, quit_callback):
         """ Initialize the nav bar """
@@ -39,6 +45,7 @@ class BottomNavbarView(tk.Frame):
         self._button_delete = tk.Button(self,
                                         text="Delete",
                                         fg="black",
+                                        command=self.delete_entry
                                         )
         self._button_delete.grid(row=1, column=3)
 
@@ -48,6 +55,22 @@ class BottomNavbarView(tk.Frame):
                                  fg="red",
                                  command=self._quit_callback)
         self._button_quit.grid(row=1, column=4)
+
+
+    def delete_entry(self):
+        if self._parent._curr_page == BottomNavbarView.TEMP_PAGE:
+            row = self._parent._temp_sensor_view.displayReadings.focus()
+            reading_id = self._parent._temp_sensor_view.displayReadings.item(row)["values"][0]
+            temp_sensor = TemperatureReadingManager(BottomNavbarView.db_name)
+            temp_sensor.delete_reading(reading_id)
+            self._parent._temp_sensor_view.update_readings()
+        elif self._parent._curr_page == BottomNavbarView.PRES_PAGE:
+            row = self._parent._pres_sensor_view.displayReadings.focus()
+            reading_id = self._parent._pres_sensor_view.displayReadings.item(row)["values"][0]
+            pres_sensor = PressureReadingManager(BottomNavbarView.db_name)
+            pres_sensor.delete_reading(reading_id)
+            self._parent._pres_sensor_view.update_readings()
+
 
 
 
