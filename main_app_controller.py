@@ -58,9 +58,6 @@ class MainAppController(tk.Frame):
         print("Submit Page 2")
         # print(self._page2.get_form_data())
 
-    def _add_callback(self):
-        """ """
-
     def _quit_callback(self):
         self.quit()
 
