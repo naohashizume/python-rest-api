@@ -69,9 +69,13 @@ class PressureSensorView(tk.Frame):
         self.displayReadings.column("status", anchor="center", width=100)
         self.displayReadings.heading("status", text="status")
         # treeview - position
-        self.displayReadings.pack(pady=15)
+        self.displayReadings.pack(side="left")
 
-        # treeview - insert data
+        # treeview - scroll bar
+        self.scrollbar = tkinter.ttk.Scrollbar(self, orient="vertical", command=self.displayReadings.yview)
+        self.scrollbar.pack(side="right", fill="y")
+        self.displayReadings.configure(yscrollcommand=self.scrollbar.set)
+
 
     def update_readings(self):
         if len(self.displayReadings.get_children()) != 0:

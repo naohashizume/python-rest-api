@@ -65,5 +65,6 @@ if __name__ == "__main__":
     root = tk.Tk()
     MainAppController(root).pack(side=tk.TOP, fill=tk.BOTH, expand=True)
     root.wm_geometry("800x500")
+    root.title("Main App Controller")
     root.mainloop()
 

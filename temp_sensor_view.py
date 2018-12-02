@@ -75,10 +75,8 @@ class TempSensorView(tk.Frame):
         # treeview - scroll bar
         self.scrollbar = tkinter.ttk.Scrollbar(self, orient="vertical", command=self.displayReadings.yview)
         self.scrollbar.pack(side="right", fill="y")
-
         self.displayReadings.configure(yscrollcommand=self.scrollbar.set)
 
-        # treeview - insert data
 
     def update_readings(self):
         if len(self.displayReadings.get_children()) != 0:
