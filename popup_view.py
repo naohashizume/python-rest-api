@@ -97,7 +97,13 @@ class PopupView(tk.Frame):
                        value=3,
                        variable=self._page).place(x=350, y=300)
 
-        self._button = tk.Button(self._parent,
+        self._submit_button = tk.Button(self._parent,
                                  text="Submit", # add command=
                                 )
-        self._button.place(x=200, y=350)
+        self._submit_button.place(x=100, y=350)
+
+        self._close_button = tk.Button(self._parent,
+                  text="Close",
+                  command=self._close_popup_callback)
+    
+        self._close_button.place(x=200, y=350)
