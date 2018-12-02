@@ -101,5 +101,5 @@ class PopupView(tk.Frame):
         self._close_button = tk.Button(self._parent,
                   text="Close",
                   command=self._close_popup_callback)
-    
+
         self._close_button.place(x=200, y=350)
