@@ -32,6 +32,7 @@ class TopNavbarView(tk.Frame):
                        command=self._page_callback,
                        value=1).grid(row=0, column=1)
 
+
         tk.Radiobutton(self,
                        text="pressure",
                        variable=self._page,

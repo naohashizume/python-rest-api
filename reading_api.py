@@ -14,7 +14,7 @@ import datetime
 
 # temp_results_file = "data/temperature_results.csv"
 # press_results_file = "data/pressure_results.csv"
-db_name = ("sqlite:///readings.sqlite")
+db_name = "sqlite:///readings.sqlite"
 
 from flask import Flask
 from flask import request

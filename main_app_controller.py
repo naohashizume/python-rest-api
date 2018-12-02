@@ -19,6 +19,8 @@ class MainAppController(tk.Frame):
         """ Initialize Main Application """
         tk.Frame.__init__(self, parent)
 
+        self._testvalue = "Test!"
+
         self._top_navbar = TopNavbarView(self, self._page_callback)
         self._temp_sensor_view = TempSensorView(self, self._page1_submit_callback)
         self._pres_sensor_view = PressureSensorView(self, self._page2_submit_callback)

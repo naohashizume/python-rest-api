@@ -49,8 +49,6 @@ class AbstractReading():
 
         return reading_data
 
-
-
     #
     # def get_timestamp(self):
     #     """ Getter for timestamp """

@@ -7,6 +7,8 @@
 import tkinter as tk
 import tkinter.ttk
 import datetime
+from manager.temperature_reading_manager import TemperatureReadingManager
+db_name = "sqlite:///readings.sqlite"
 
 class TempSensorView(tk.Frame):
     """ TODO: Explain about this file """
@@ -19,6 +21,9 @@ class TempSensorView(tk.Frame):
         self._page_callback = page_callback
 
         self._create_widgets()
+
+        self.update_readings()
+
 
     def _create_widgets(self):
         """ Creates the widgets for Temperature Sensor Page """
@@ -74,105 +79,117 @@ class TempSensorView(tk.Frame):
         self.displayReadings.configure(yscrollcommand=self.scrollbar.set)
 
         # treeview - insert data
-        self.displayReadings.insert("", "end",
-                                    values=[len(self.displayReadings.get_children("")) + 1,
-                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp M301A",
-                                            20.152,
-                                            21.367,
-                                            22.005,
-                                            "OK"])
-        self.displayReadings.insert("", "end",
-                                    values=[len(self.displayReadings.get_children("")) + 1,
-                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp M301A",
-                                            20.152,
-                                            21.367,
-                                            22.005,
-                                            "OK"])
 
-        self.displayReadings.insert("", "end",
-                                    values=[len(self.displayReadings.get_children("")) + 1,
-                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp M301A",
-                                            20.152,
-                                            21.367,
-                                            22.005,
-                                            "OK"])
-
-        self.displayReadings.insert("", "end",
-                                    values=[len(self.displayReadings.get_children("")) + 1,
-                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp M301A",
-                                            20.152,
-                                            21.367,
-                                            22.005,
-                                            "OK"])
-
-        self.displayReadings.insert("", "end",
-                                    values=[len(self.displayReadings.get_children("")) + 1,
-                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp M301A",
-                                            20.152,
-                                            21.367,
-                                            22.005,
-                                            "OK"])
-
-        self.displayReadings.insert("", "end",
-                                    values=[len(self.displayReadings.get_children("")) + 1,
-                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp M301A",
-                                            20.152,
-                                            21.367,
-                                            22.005,
-                                            "OK"])
-
-        self.displayReadings.insert("", "end",
-                                    values=[len(self.displayReadings.get_children("")) + 1,
-                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp M301A",
-                                            20.152,
-                                            21.367,
-                                            22.005,
-                                            "OK"])
-
-        self.displayReadings.insert("", "end",
-                                    values=[len(self.displayReadings.get_children("")) + 1,
-                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp M301A",
-                                            20.152,
-                                            21.367,
-                                            22.005,
-                                            "OK"])
-
-        self.displayReadings.insert("", "end",
-                                    values=[len(self.displayReadings.get_children("")) + 1,
-                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp M301A",
-                                            20.152,
-                                            21.367,
-                                            22.005,
-                                            "OK"])
-        self.displayReadings.insert("", "end",
-                                    values=[len(self.displayReadings.get_children("")) + 1,
-                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp M301A",
-                                            20.152,
-                                            21.367,
-                                            22.005,
-                                            "OK"])
-
-        self.displayReadings.insert("", "end",
-                                    values=[len(self.displayReadings.get_children("")) + 1,
-                                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                                            "ABC Sensor Temp M301A",
-                                            20.152,
-                                            21.367,
-                                            22.005,
-                                            "OK"])
+    def update_readings(self):
+        if len(self.displayReadings.get_children()) != 0:
+            item_list = self.displayReadings.get_children()
+            for item in item_list:
+                self.displayReadings.delete(item)
+        db = TemperatureReadingManager(db_name)
+        temp_readings = db.get_all_readings()
+        for reading in temp_readings:
+            self.displayReadings.insert("", "end", values=[reading["id"], reading["timestamp"], reading["model"], reading["min_reading"], reading["avg_reading"], reading["max_reading"], reading["status"]])
 
 
-
-
-
-
+        # self.displayReadings.insert("", "end",
+        #                             values=[len(self.displayReadings.get_children("")) + 1,
+        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        #                                     "ABC Sensor Temp M301A",
+        #                                     20.152,
+        #                                     21.367,
+        #                                     22.005,
+        #                                     "OK"])
+        # self.displayReadings.insert("", "end",
+        #                             values=[len(self.displayReadings.get_children("")) + 1,
+        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        #                                     "ABC Sensor Temp M301A",
+        #                                     20.152,
+        #                                     21.367,
+        #                                     22.005,
+        #                                     "OK"])
+        #
+        # self.displayReadings.insert("", "end",
+        #                             values=[len(self.displayReadings.get_children("")) + 1,
+        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        #                                     "ABC Sensor Temp M301A",
+        #                                     20.152,
+        #                                     21.367,
+        #                                     22.005,
+        #                                     "OK"])
+        #
+        # self.displayReadings.insert("", "end",
+        #                             values=[len(self.displayReadings.get_children("")) + 1,
+        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        #                                     "ABC Sensor Temp M301A",
+        #                                     20.152,
+        #                                     21.367,
+        #                                     22.005,
+        #                                     "OK"])
+        #
+        # self.displayReadings.insert("", "end",
+        #                             values=[len(self.displayReadings.get_children("")) + 1,
+        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        #                                     "ABC Sensor Temp M301A",
+        #                                     20.152,
+        #                                     21.367,
+        #                                     22.005,
+        #                                     "OK"])
+        #
+        # self.displayReadings.insert("", "end",
+        #                             values=[len(self.displayReadings.get_children("")) + 1,
+        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        #                                     "ABC Sensor Temp M301A",
+        #                                     20.152,
+        #                                     21.367,
+        #                                     22.005,
+        #                                     "OK"])
+        #
+        # self.displayReadings.insert("", "end",
+        #                             values=[len(self.displayReadings.get_children("")) + 1,
+        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        #                                     "ABC Sensor Temp M301A",
+        #                                     20.152,
+        #                                     21.367,
+        #                                     22.005,
+        #                                     "OK"])
+        #
+        # self.displayReadings.insert("", "end",
+        #                             values=[len(self.displayReadings.get_children("")) + 1,
+        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        #                                     "ABC Sensor Temp M301A",
+        #                                     20.152,
+        #                                     21.367,
+        #                                     22.005,
+        #                                     "OK"])
+        #
+        # self.displayReadings.insert("", "end",
+        #                             values=[len(self.displayReadings.get_children("")) + 1,
+        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        #                                     "ABC Sensor Temp M301A",
+        #                                     20.152,
+        #                                     21.367,
+        #                                     22.005,
+        #                                     "OK"])
+        # self.displayReadings.insert("", "end",
+        #                             values=[len(self.displayReadings.get_children("")) + 1,
+        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        #                                     "ABC Sensor Temp M301A",
+        #                                     20.152,
+        #                                     21.367,
+        #                                     22.005,
+        #                                     "OK"])
+        #
+        # self.displayReadings.insert("", "end",
+        #                             values=[len(self.displayReadings.get_children("")) + 1,
+        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        #                                     "ABC Sensor Temp M301A",
+        #                                     20.152,
+        #                                     21.367,
+        #                                     22.005,
+        #                                     "OK"])
+        #
+        #
+        #
+        #
+        #
+        #
