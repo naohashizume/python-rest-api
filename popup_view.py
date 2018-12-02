@@ -17,6 +17,7 @@ class PopupView(tk.Frame):
         self._parent = parent
         self._parent.geometry("500x400")
         # self._parent.title("Add New Reading")
+        self._page = tk.IntVar()
         self._close_popup_callback = close_popup_callback
         self._create_widgets()
 
@@ -83,15 +84,18 @@ class PopupView(tk.Frame):
 
         tk.Radiobutton(self._parent,
                        text="OK", # add command=
-                       value=1).place(x=150, y=300)
+                       value=1,
+                       variable=self._page).place(x=150, y=300)
 
         tk.Radiobutton(self._parent,
                        text="HIGH", # add command=
-                       value=2).place(x=250, y=300)
+                       value=2,
+                       variable=self._page).place(x=250, y=300)
 
         tk.Radiobutton(self._parent,
                        text="LOW", # add command=
-                       value=3).place(x=350, y=300)
+                       value=3,
+                       variable=self._page).place(x=350, y=300)
 
         self._submit_button = tk.Button(self._parent,
                                  text="Submit", # add command=
