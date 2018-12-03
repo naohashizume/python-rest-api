@@ -51,6 +51,7 @@ class MainAppController(tk.Frame):
 
     def _update_popup_callback(self):
         self._popup_win = tk.Toplevel()
+
         self._popup = UpdatePopupView(self._popup_win, self._close_popup_callback, self)
 
     def _close_popup_callback(self):
