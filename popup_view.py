@@ -4,22 +4,37 @@
 #
 # Author:  Nao Hashizume, Matt Harrison Set 2B
 
+import datetime
 import tkinter as tk
 from tkinter import messagebox as tkMessageBox
-
+from manager.pressure_reading_manager import PressureReadingManager
+from manager.temperature_reading_manager import TemperatureReadingManager
+from readings.pressure_reading import PressureReading
+from readings.temperature_reading import TemperatureReading
+db_name = "sqlite:///readings.sqlite"
 
 class PopupView(tk.Frame):
     """ Popup Window """
 
-    def __init__(self, parent, close_popup_callback):
+    SELECT_OK = "OK"
+    SELECT_LOW = "LOW"
+    SELECT_HIGH = "HIGH"
+    TEMP_PAGE = 1
+    PRES_PAGE = 2
+    DATE_FORMAT = "%Y-%m-%d %H:%M"
+
+
+    def __init__(self, parent, close_popup_callback, master):
         """ Initialize the nav bar """
         tk.Frame.__init__(self, parent)
         self._parent = parent
+        self._master = master
         self._parent.geometry("500x400")
-        self._parent.title("Add New Reading")
-        self._page = tk.IntVar()
+        # self._parent.title("Add New Reading")
+        self._status_var = tk.StringVar(value="OK")
         self._close_popup_callback = close_popup_callback
         self._create_widgets()
+        self._selection = "Blar"
 
     def _create_widgets(self):
         """ Creates the widgets for the nav bar """
@@ -82,23 +97,24 @@ class PopupView(tk.Frame):
                  text="Choose Status:",
                  width=20).place(x=10, y=300)
 
-        tk.Radiobutton(self._parent,
-                       text="OK/GOOD", # add command=
-                       value=1,
-                       variable=self._page).place(x=150, y=300)
+        self.radio_ok = tk.Radiobutton(self._parent,
+                       text="OK",
+                       value="OK",
+                       variable=self._status_var).place(x=150, y=300)
 
-        tk.Radiobutton(self._parent,
-                       text="HIGH", # add command=
-                       value=2,
-                       variable=self._page).place(x=250, y=300)
 
-        tk.Radiobutton(self._parent,
-                       text="LOW", # add command=
-                       value=3,
-                       variable=self._page).place(x=350, y=300)
+        self.radio_high = tk.Radiobutton(self._parent,
+                       text="HIGH",
+                       value="HIGH",
+                       variable=self._status_var).place(x=250, y=300)
+
+        self.radio_low = tk.Radiobutton(self._parent,
+                       text="LOW",
+                       value="LOW",
+                       variable=self._status_var).place(x=350, y=300)
 
         self._submit_button = tk.Button(self._parent,
-                                 text="Add", # add command=
+                                 text="Submit", command=self.add_reading
                                 )
         self._submit_button.place(x=100, y=350)
 
@@ -107,3 +123,21 @@ class PopupView(tk.Frame):
                   command=self._close_popup_callback)
 
         self._close_button.place(x=200, y=350)
+
+
+    def add_reading(self):
+        new_timestamp =  datetime.datetime.strptime(self.entry_1.get(), PopupView.DATE_FORMAT)
+        new_model = self.entry_2.get()
+        new_min_reading = self.entry_3.get()
+        new_avg_reading = self.entry_4.get()
+        new_max_reading = self.entry_5.get()
+        new_status = self._status_var.get()
+        if self._master._curr_page == PopupView.TEMP_PAGE:
+            new_reading = TemperatureReading(new_timestamp, new_model, new_min_reading, new_avg_reading, new_max_reading, new_status)
+            temp_manager = TemperatureReadingManager(db_name)
+            temp_manager.add_reading(new_reading)
+        elif self._master._curr_page == PopupView.PRES_PAGE:
+            new_reading = PressureReading(new_timestamp, new_model, new_min_reading, new_avg_reading,
+                                             new_max_reading, new_status)
+            temp_manager = PressureReadingManager(db_name)
+            temp_manager.add_reading(new_reading)

@@ -13,9 +13,9 @@ class TemperatureReading(AbstractReading, Base):
 
     __tablename__ = 'temperature_reading'
 
-    def __init__(self, date, model, min_reading, avg_reading, max_reading, status):
+    def __init__(self, timestamp, model, min_reading, avg_reading, max_reading, status):
         """ Initializes the pressure sensor reading """
-        super().__init__(date, model, min_reading, avg_reading, max_reading, status)
+        super().__init__(timestamp, model, min_reading, avg_reading, max_reading, status)
 
     # # CONSTANTS
     # HIGH_TEMP_ERROR = "HIGH_TEMP"

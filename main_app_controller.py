@@ -13,6 +13,7 @@ from popup_view import PopupView
 from update_popup_view import UpdatePopupView
 
 
+
 class MainAppController(tk.Frame):
     """ Main Application for GUI """
 
@@ -45,8 +46,8 @@ class MainAppController(tk.Frame):
             self._curr_page = TopNavbarView.TEMP_PAGE
 
     def _page_popup_callback(self):
-        self._popup_win = tk.Toplevel()
-        self._popup = PopupView(self._popup_win, self._close_popup_callback)
+        self._popup_win = tk.Toplevel(self)
+        self._popup = PopupView(self._popup_win, self._close_popup_callback, self)
 
     def _update_popup_callback(self):
         self._popup_win = tk.Toplevel()
@@ -72,4 +73,3 @@ if __name__ == "__main__":
     root.wm_geometry("800x400")
     root.title("Main App Controller")
     root.mainloop()
-
