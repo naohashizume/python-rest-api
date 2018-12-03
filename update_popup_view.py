@@ -1,6 +1,6 @@
 # update_popup_view.py
 #
-# TODO: Explain about this file
+# Defines the UpdatePopupView class
 #
 # Author:  Nao Hashizume, Matt Harrison Set 2B
 
