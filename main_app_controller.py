@@ -10,6 +10,7 @@ from temp_sensor_view import TempSensorView
 from pres_sensor_view import PressureSensorView
 from bottom_navbar_view import BottomNavbarView
 from popup_view import PopupView
+from update_popup_view import UpdatePopupView
 
 
 class MainAppController(tk.Frame):
@@ -24,7 +25,7 @@ class MainAppController(tk.Frame):
         self._top_navbar = TopNavbarView(self, self._page_callback)
         self._temp_sensor_view = TempSensorView(self, self._page1_submit_callback)
         self._pres_sensor_view = PressureSensorView(self, self._page2_submit_callback)
-        self._bottom_navbar = BottomNavbarView(self,self._page_popup_callback, self._quit_callback)
+        self._bottom_navbar = BottomNavbarView(self,self._page_popup_callback, self._update_popup_callback, self._quit_callback)
 
         self._top_navbar.grid(row=0, columnspan=4, pady=10)
         self._temp_sensor_view.grid(row=1, columnspan=4, pady=10)
@@ -47,6 +48,10 @@ class MainAppController(tk.Frame):
         self._popup_win = tk.Toplevel()
         self._popup = PopupView(self._popup_win, self._close_popup_callback)
 
+    def _update_popup_callback(self):
+        self._popup_win = tk.Toplevel()
+        self._popup = UpdatePopupView(self._popup_win, self._close_popup_callback, self)
+
     def _close_popup_callback(self):
         self._popup_win.destroy()
 
@@ -64,7 +69,7 @@ class MainAppController(tk.Frame):
 if __name__ == "__main__":
     root = tk.Tk()
     MainAppController(root).pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-    root.wm_geometry("800x500")
+    root.wm_geometry("800x400")
     root.title("Main App Controller")
     root.mainloop()
 
