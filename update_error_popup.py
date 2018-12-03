@@ -10,4 +10,3 @@ from tkinter import messagebox as tkMessageBox
 
 class UpdateErrorPopup(tk.Frame):
     """ Update Error Popup Window """
-    
