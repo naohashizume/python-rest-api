@@ -125,7 +125,7 @@ class PopupView(tk.Frame):
 
 
     def add_reading(self):
-        new_timestamp =  datetime.datetime.strptime(self.entry_1.get(), PopupView.DATE_FORMAT)
+        new_timestamp = datetime.datetime.strptime(self.entry_1.get(), PopupView.DATE_FORMAT)
         new_model = self.entry_2.get()
         new_min_reading = self.entry_3.get()
         new_avg_reading = self.entry_4.get()
@@ -135,8 +135,10 @@ class PopupView(tk.Frame):
             new_reading = TemperatureReading(new_timestamp, new_model, new_min_reading, new_avg_reading, new_max_reading, new_status)
             temp_manager = TemperatureReadingManager(db_name)
             temp_manager.add_reading(new_reading)
+            self._master._temp_sensor_view.update_readings()
         elif self._master._curr_page == PopupView.PRES_PAGE:
             new_reading = PressureReading(new_timestamp, new_model, new_min_reading, new_avg_reading,
                                              new_max_reading, new_status)
             temp_manager = PressureReadingManager(db_name)
             temp_manager.add_reading(new_reading)
+            self._master._pres_sensor_view.update_readings()
