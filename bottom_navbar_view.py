@@ -60,20 +60,23 @@ class BottomNavbarView(tk.Frame):
 
 
     def delete_entry(self):
-        if tkMessageBox.askyesno('Verify', 'Do you really want to delete?'):
-            # Delete item
-            if self._parent._curr_page == BottomNavbarView.TEMP_PAGE:
-                row = self._parent._temp_sensor_view.displayReadings.focus()
-                reading_id = self._parent._temp_sensor_view.displayReadings.item(row)["values"][0]
-                temp_sensor = TemperatureReadingManager(BottomNavbarView.db_name)
-                temp_sensor.delete_reading(reading_id)
-                self._parent._temp_sensor_view.update_readings()
-            elif self._parent._curr_page == BottomNavbarView.PRES_PAGE:
-                row = self._parent._pres_sensor_view.displayReadings.focus()
-                reading_id = self._parent._pres_sensor_view.displayReadings.item(row)["values"][0]
-                pres_sensor = PressureReadingManager(BottomNavbarView.db_name)
-                pres_sensor.delete_reading(reading_id)
-                self._parent._pres_sensor_view.update_readings()
+        try :
+            if tkMessageBox.askyesno('Verify', 'Do you really want to delete?'):
+                # Delete item
+                if self._parent._curr_page == BottomNavbarView.TEMP_PAGE:
+                    row = self._parent._temp_sensor_view.displayReadings.focus()
+                    reading_id = self._parent._temp_sensor_view.displayReadings.item(row)["values"][0]
+                    temp_sensor = TemperatureReadingManager(BottomNavbarView.db_name)
+                    temp_sensor.delete_reading(reading_id)
+                    self._parent._temp_sensor_view.update_readings()
+                elif self._parent._curr_page == BottomNavbarView.PRES_PAGE:
+                    row = self._parent._pres_sensor_view.displayReadings.focus()
+                    reading_id = self._parent._pres_sensor_view.displayReadings.item(row)["values"][0]
+                    pres_sensor = PressureReadingManager(BottomNavbarView.db_name)
+                    pres_sensor.delete_reading(reading_id)
+                    self._parent._pres_sensor_view.update_readings()
+        except (IndexError,ValueError):
+            tkMessageBox.showerror("Error", "Please select a row to delete.")
 
 
 

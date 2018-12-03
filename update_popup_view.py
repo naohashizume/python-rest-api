@@ -127,9 +127,13 @@ class UpdatePopupView(tk.Frame):
     def get_selected_id(self):
         """"""
         if self._master._curr_page == UpdatePopupView.TEMP_PAGE:
-            row = self._master._temp_sensor_view.displayReadings.focus()
-            reading_id = self._master._temp_sensor_view.displayReadings.item(row)["values"][0]
-            return reading_id
+            try:
+                row = self._master._temp_sensor_view.displayReadings.focus()
+                print(row)
+                reading_id = self._master._temp_sensor_view.displayReadings.item(row)["values"][0]
+                return reading_id
+            except (ValueError, IndexError):
+                tkMessageBox.showerror("Error", "Please select a row to update.")
 
         elif self._master._curr_page == UpdatePopupView.PRES_PAGE:
             row = self._master._pres_sensor_view.displayReadings.focus()
