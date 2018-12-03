@@ -36,98 +36,99 @@ FAILURE_RESPONSE_CODE = 400
 @app.route('/sensor/<string:sensor_type>/reading', methods=['POST'])
 def add_reading(sensor_type):
     """API call to add a new sensor reading to the reading manager"""
-    # try:
-    if sensor_type == "temperature":
-        temp_sensor = TemperatureReadingManager(db_name)
-        json_reading = request.get_json()
-        timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
-        new_reading = TemperatureReading(timestamp, json_reading[MODEL],
-                                         json_reading[MIN_READING], json_reading[AVG_READING], json_reading[MAX_READING],
-                                         json_reading[STATUS])
-        temp_sensor.add_reading(new_reading)
-        response = app.response_class(
-            response='Reading added successfully',
-            status=SUCCESS_RESPONSE_CODE,
-            mimetype='text/plain'
-        )
-        return response
+    try:
+        if sensor_type == "temperature":
+            temp_sensor = TemperatureReadingManager(db_name)
+            json_reading = request.get_json()
+            timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
+            new_reading = TemperatureReading(timestamp, json_reading[MODEL],
+                                             json_reading[MIN_READING], json_reading[AVG_READING], json_reading[MAX_READING],
+                                             json_reading[STATUS])
+            temp_sensor.add_reading(new_reading)
+            response = app.response_class(
+                response='Reading added successfully',
+                status=SUCCESS_RESPONSE_CODE,
+                mimetype='text/plain'
+            )
+            return response
 
-    elif sensor_type == "pressure":
-        press_sensor = PressureReadingManager(db_name)
-        json_reading = request.get_json()
-        timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
-        new_reading = PressureReading(timestamp, json_reading[MODEL], json_reading[MIN_READING], json_reading[AVG_READING], json_reading[MAX_READING], json_reading[STATUS])
-        press_sensor.add_reading(new_reading)
-        response = app.response_class(
-            response='Reading added successfully',
-            status=SUCCESS_RESPONSE_CODE,
-            mimetype='text/plain'
-        )
-        return response
+        elif sensor_type == "pressure":
+            press_sensor = PressureReadingManager(db_name)
+            json_reading = request.get_json()
+            timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
+            new_reading = PressureReading(timestamp, json_reading[MODEL], json_reading[MIN_READING], json_reading[AVG_READING], json_reading[MAX_READING], json_reading[STATUS])
+            press_sensor.add_reading(new_reading)
+            response = app.response_class(
+                response='Reading added successfully',
+                status=SUCCESS_RESPONSE_CODE,
+                mimetype='text/plain'
+            )
+            return response
 
-    else:
+        else:
+            response = app.response_class(
+                response="Bad Request",
+                status=FAILURE_RESPONSE_CODE,
+                mimetype='application/json'
+            )
+            return response
+
+    except (KeyError, ValueError):
         response = app.response_class(
             response="Bad Request",
             status=FAILURE_RESPONSE_CODE,
             mimetype='application/json'
-        )
+            )
         return response
-    # except (KeyError, ValueError):
-    #     response = app.response_class(
-    #         response="Bad Request",
-    #         status=FAILURE_RESPONSE_CODE,
-    #         mimetype='application/json'
-    #         )
-    #     return response
 
 @app.route('/sensor/<string:sensor_type>/reading/<int:id>', methods=['PUT'])
 def update_reading(sensor_type, id):
     """API call to update a reading in the reading manager"""
-    # try:
-    if sensor_type == "temperature":
-        press_sensor = TemperatureReadingManager(db_name)
-        json_reading = request.get_json()
-        timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
-        new_reading = TemperatureReading(timestamp, json_reading[MODEL],
-                                         json_reading[MIN_READING], json_reading[AVG_READING],
-                                         json_reading[MAX_READING], json_reading[STATUS])
-        press_sensor.update_reading(id, new_reading)
-        response = app.response_class(
-            response='Reading updated successfully',
-            status=SUCCESS_RESPONSE_CODE,
-            mimetype='text/plain'
-        )
-        return response
+    try:
+        if sensor_type == "temperature":
+            press_sensor = TemperatureReadingManager(db_name)
+            json_reading = request.get_json()
+            timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
+            new_reading = TemperatureReading(timestamp, json_reading[MODEL],
+                                             json_reading[MIN_READING], json_reading[AVG_READING],
+                                             json_reading[MAX_READING], json_reading[STATUS])
+            press_sensor.update_reading(id, new_reading)
+            response = app.response_class(
+                response='Reading updated successfully',
+                status=SUCCESS_RESPONSE_CODE,
+                mimetype='text/plain'
+            )
+            return response
 
-    elif sensor_type == "pressure":
-        press_sensor = PressureReadingManager(db_name)
-        json_reading = request.get_json()
-        timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
-        new_reading = PressureReading(timestamp, json_reading[MODEL], json_reading[MIN_READING],
-                                      json_reading[AVG_READING], json_reading[MAX_READING], json_reading[STATUS])
-        press_sensor.update_reading(id, new_reading)
-        response = app.response_class(
-            response='Reading updated successfully',
-            status=SUCCESS_RESPONSE_CODE,
-            mimetype='text/plain'
-        )
-        return response
+        elif sensor_type == "pressure":
+            press_sensor = PressureReadingManager(db_name)
+            json_reading = request.get_json()
+            timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
+            new_reading = PressureReading(timestamp, json_reading[MODEL], json_reading[MIN_READING],
+                                          json_reading[AVG_READING], json_reading[MAX_READING], json_reading[STATUS])
+            press_sensor.update_reading(id, new_reading)
+            response = app.response_class(
+                response='Reading updated successfully',
+                status=SUCCESS_RESPONSE_CODE,
+                mimetype='text/plain'
+            )
+            return response
 
-    else:
+        else:
+            response = app.response_class(
+                response="Bad Request",
+                status=FAILURE_RESPONSE_CODE,
+                mimetype='application/json'
+            )
+            return response
+
+    except(AttributeError, KeyError, ValueError):
         response = app.response_class(
             response="Bad Request",
             status=FAILURE_RESPONSE_CODE,
             mimetype='application/json'
         )
         return response
-
-    # except(AttributeError, KeyError, ValueError):
-    #     response = app.response_class(
-    #         response="Bad Request",
-    #         status=FAILURE_RESPONSE_CODE,
-    #         mimetype='application/json'
-    #     )
-    #     return response
 
 @app.route('/sensor/<string:sensor_type>/reading/<int:id>', methods=['GET'])
 def get_reading(sensor_type, id):

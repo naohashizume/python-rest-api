@@ -33,7 +33,7 @@ class UpdatePopupView(tk.Frame):
         self.label_title.place(x=150, y=10)
 
         # label - id of selected row
-        self.label_selected_id = tk.Label(self._parent, text="Id of selected row is",width=20)
+        self.label_selected_id = tk.Label(self._parent, text="Selected Row id:",width=20)
         self.label_selected_id.place(x=10, y=50)
 
         self.entry_selected_id = tk.Entry(self._parent)

@@ -6,9 +6,6 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from readings.abstract_reading import AbstractReading
-from readings.temperature_reading import TemperatureReading
-from readings.pressure_reading import PressureReading
 
 import csv
 import json
@@ -17,13 +14,14 @@ class AbstractReadingManager():
     """ Abstract Reading Manager Class """
 
     def __init__(self, db_name):
-        """ TODO """
+        """ Initializer for AbstractReadingManager """
         engine = create_engine(db_name)
         self.DBSession = sessionmaker(bind=engine)
         #self.reading_type = sensor_reading_type
 
 
     def add_reading(self, new_reading):
+        """ Add a new reading to SQL database """
         session = self.DBSession()
         session.add(new_reading)
         session.commit()

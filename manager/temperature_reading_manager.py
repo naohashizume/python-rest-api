@@ -19,6 +19,7 @@ class TemperatureReadingManager(AbstractReadingManager):
 
 
     def get_reading(self, id):
+        """ Get temperature reading from SQL database"""
         session = self.DBSession()
         reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
         if reading is not None:
@@ -26,7 +27,9 @@ class TemperatureReadingManager(AbstractReadingManager):
         else:
             return None
 
+
     def get_all_readings(self):
+        """ Get all temperature readings from SQL database """
         session = self.DBSession()
         readings = session.query(TemperatureReading).all()
         if readings is not None:
@@ -39,6 +42,7 @@ class TemperatureReadingManager(AbstractReadingManager):
 
 
     def delete_reading(self, id):
+        """ Delete a temperature reading from the SQL database by id """
         session = self.DBSession()
         del_reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
         if del_reading is not None:
@@ -50,6 +54,7 @@ class TemperatureReadingManager(AbstractReadingManager):
 
 
     def update_reading(self, id, new_reading):
+        """ Update a temperature reading from the SQL database by id"""
         session = self.DBSession()
         update_reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
 

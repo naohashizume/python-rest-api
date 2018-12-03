@@ -16,11 +16,12 @@ class PressureReadingManager(AbstractReadingManager):
     DATE_FORMAT = '%Y-%m-%d %H:%M'
 
     def __init__(self, db_name):
-        """ Constructor for PressureSensor Class """
+        """ Constructor for PressureReadingManager class """
         super().__init__(db_name)
 
 
     def get_reading(self, id):
+        """ Get a reading from the SQL database by id """
         session = self.DBSession()
         reading = session.query(PressureReading).filter(PressureReading.id == id).first()
         if reading is not None:
@@ -30,6 +31,7 @@ class PressureReadingManager(AbstractReadingManager):
 
 
     def get_all_readings(self):
+        """ Get all readings from the SQL database """
         session = self.DBSession()
         readings = session.query(PressureReading).all()
         if readings is not None:
@@ -42,6 +44,7 @@ class PressureReadingManager(AbstractReadingManager):
 
 
     def delete_reading(self, id):
+        """ Delete reading from the SQL database by id """
         session = self.DBSession()
         del_reading = session.query(PressureReading).filter(PressureReading.id == id).first()
         if del_reading is not None:
@@ -53,6 +56,7 @@ class PressureReadingManager(AbstractReadingManager):
 
 
     def update_reading(self, id, new_reading):
+        """ Update reading in the SQL database by id"""
         session = self.DBSession()
         update_reading = session.query(PressureReading).filter(PressureReading.id == id).first()
 
