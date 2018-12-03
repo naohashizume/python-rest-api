@@ -4,17 +4,24 @@
 #
 # Author:  Nao Hashizume, Matt Harrison Set 2B
 
+import requests
 import tkinter as tk
 from tkinter import messagebox as tkMessageBox
 from manager.temperature_reading_manager import TemperatureReadingManager
 from manager.pressure_reading_manager import PressureReadingManager
+
+API_ENDPOINT = "http://127.0.0.1:5000/sensor/"
+TEMP_READING_SUFFIX = "temperature/reading/"
+PRES_READING_SUFFIX = "pressure/reading/"
 
 class BottomNavbarView(tk.Frame):
     """ Bottom Navigation Bar """
 
     TEMP_PAGE = 1
     PRES_PAGE = 2
+
     db_name = "sqlite:///readings.sqlite"
+
 
     def __init__(self, parent, page_popup_callback, update_popup_callback, quit_callback):
         """ Initialize the nav bar """
@@ -60,23 +67,50 @@ class BottomNavbarView(tk.Frame):
 
 
     def delete_entry(self):
+        """ Delete an entry from the database via the API"""
         try :
             if tkMessageBox.askyesno('Verify', 'Do you really want to delete?'):
                 # Delete item
                 if self._parent._curr_page == BottomNavbarView.TEMP_PAGE:
                     row = self._parent._temp_sensor_view.displayReadings.focus()
                     reading_id = self._parent._temp_sensor_view.displayReadings.item(row)["values"][0]
-                    temp_sensor = TemperatureReadingManager(BottomNavbarView.db_name)
-                    temp_sensor.delete_reading(reading_id)
+                    delete_url = API_ENDPOINT + TEMP_READING_SUFFIX + str(reading_id)
+                    response = requests.delete(delete_url)
                     self._parent._temp_sensor_view.update_readings()
                 elif self._parent._curr_page == BottomNavbarView.PRES_PAGE:
                     row = self._parent._pres_sensor_view.displayReadings.focus()
                     reading_id = self._parent._pres_sensor_view.displayReadings.item(row)["values"][0]
-                    pres_sensor = PressureReadingManager(BottomNavbarView.db_name)
-                    pres_sensor.delete_reading(reading_id)
+                    delete_url = API_ENDPOINT + PRES_READING_SUFFIX + str(reading_id)
+                    response = requests.delete(delete_url)
                     self._parent._pres_sensor_view.update_readings()
+                else:
+                    tkMessageBox.showerror("Error", "Invalid sensor selection")
+
+
         except (IndexError,ValueError):
             tkMessageBox.showerror("Error", "Please select a row to delete.")
+
+
+
+    # def delete_entry(self):
+    #   """ Old delete entry method using direct access to manager methods """
+    #     try :
+    #         if tkMessageBox.askyesno('Verify', 'Do you really want to delete?'):
+    #             # Delete item
+    #             if self._parent._curr_page == BottomNavbarView.TEMP_PAGE:
+    #                 row = self._parent._temp_sensor_view.displayReadings.focus()
+    #                 reading_id = self._parent._temp_sensor_view.displayReadings.item(row)["values"][0]
+    #                 temp_sensor = TemperatureReadingManager(BottomNavbarView.db_name)
+    #                 temp_sensor.delete_reading(reading_id)
+    #                 self._parent._temp_sensor_view.update_readings()
+    #             elif self._parent._curr_page == BottomNavbarView.PRES_PAGE:
+    #                 row = self._parent._pres_sensor_view.displayReadings.focus()
+    #                 reading_id = self._parent._pres_sensor_view.displayReadings.item(row)["values"][0]
+    #                 pres_sensor = PressureReadingManager(BottomNavbarView.db_name)
+    #                 pres_sensor.delete_reading(reading_id)
+    #                 self._parent._pres_sensor_view.update_readings()
+    #     except (IndexError,ValueError):
+    #         tkMessageBox.showerror("Error", "Please select a row to delete.")
 
 
 

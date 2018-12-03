@@ -7,11 +7,12 @@
 import datetime
 import tkinter as tk
 from tkinter import messagebox as tkMessageBox
-from manager.pressure_reading_manager import PressureReadingManager
-from manager.temperature_reading_manager import TemperatureReadingManager
-from readings.pressure_reading import PressureReading
-from readings.temperature_reading import TemperatureReading
-db_name = "sqlite:///readings.sqlite"
+import requests
+
+API_ENDPOINT = "http://127.0.0.1:5000/sensor/"
+TEMP_READING_SUFFIX = "temperature/reading"
+PRES_READING_SUFFIX = "pressure/reading"
+
 
 class PopupView(tk.Frame):
     """ Popup Window """
@@ -126,20 +127,44 @@ class PopupView(tk.Frame):
 
 
     def add_reading(self):
-        new_timestamp = datetime.datetime.strptime(self.entry_1.get(), PopupView.DATE_FORMAT)
+        """ Add a reading to the database via the API """
+        new_timestamp = self.entry_1.get()
         new_model = self.entry_2.get()
         new_min_reading = self.entry_3.get()
         new_avg_reading = self.entry_4.get()
         new_max_reading = self.entry_5.get()
         new_status = self._status_var.get()
         if self._master._curr_page == PopupView.TEMP_PAGE:
-            new_reading = TemperatureReading(new_timestamp, new_model, new_min_reading, new_avg_reading, new_max_reading, new_status)
-            temp_manager = TemperatureReadingManager(db_name)
-            temp_manager.add_reading(new_reading)
+            post_url = API_ENDPOINT + TEMP_READING_SUFFIX
+            headers = {"content-type": "application/json"}
+            reading_data = {"timestamp": new_timestamp, "model": new_model, "min_reading": new_min_reading, "avg_reading": new_avg_reading, "max_reading": new_max_reading, "status": new_status}
+            response = requests.post(post_url, json=reading_data, headers=headers)
             self._master._temp_sensor_view.update_readings()
         elif self._master._curr_page == PopupView.PRES_PAGE:
-            new_reading = PressureReading(new_timestamp, new_model, new_min_reading, new_avg_reading,
-                                             new_max_reading, new_status)
-            temp_manager = PressureReadingManager(db_name)
-            temp_manager.add_reading(new_reading)
+            post_url = API_ENDPOINT + PRES_READING_SUFFIX
+            headers = {"content-type": "application/json"}
+            reading_data = {"timestamp": new_timestamp, "model": new_model, "min_reading": new_min_reading,
+                            "avg_reading": new_avg_reading, "max_reading": new_max_reading, "status": new_status}
+            response = requests.post(post_url, json=reading_data, headers=headers)
             self._master._pres_sensor_view.update_readings()
+
+
+    # def add_reading(self):
+    #     """ Old method to add a reading to the database using direct access to reading and manager classes"""
+    #     new_timestamp = datetime.datetime.strptime(self.entry_1.get(), PopupView.DATE_FORMAT)
+    #     new_model = self.entry_2.get()
+    #     new_min_reading = self.entry_3.get()
+    #     new_avg_reading = self.entry_4.get()
+    #     new_max_reading = self.entry_5.get()
+    #     new_status = self._status_var.get()
+    #     if self._master._curr_page == PopupView.TEMP_PAGE:
+    #         new_reading = TemperatureReading(new_timestamp, new_model, new_min_reading, new_avg_reading, new_max_reading, new_status)
+    #         temp_manager = TemperatureReadingManager(db_name)
+    #         temp_manager.add_reading(new_reading)
+    #         self._master._temp_sensor_view.update_readings()
+    #     elif self._master._curr_page == PopupView.PRES_PAGE:
+    #         new_reading = PressureReading(new_timestamp, new_model, new_min_reading, new_avg_reading,
+    #                                          new_max_reading, new_status)
+    #         temp_manager = PressureReadingManager(db_name)
+    #         temp_manager.add_reading(new_reading)
+    #         self._master._pres_sensor_view.update_readings()

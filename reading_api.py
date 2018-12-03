@@ -20,14 +20,12 @@ from flask import Flask
 from flask import request
 app = Flask(__name__)
 
-#DEFAULT_SEQ_NUM = 0
 TIMESTAMP = "timestamp"
 MODEL = "model"
 MIN_READING = "min_reading"
 AVG_READING = "avg_reading"
 MAX_READING = "max_reading"
 STATUS = "status"
-#TEMP_DATE_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
 DATE_FORMAT = "%Y-%m-%d %H:%M"
 
 SUCCESS_RESPONSE_CODE = 200

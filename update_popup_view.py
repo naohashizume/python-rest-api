@@ -129,7 +129,6 @@ class UpdatePopupView(tk.Frame):
         if self._master._curr_page == UpdatePopupView.TEMP_PAGE:
             try:
                 row = self._master._temp_sensor_view.displayReadings.focus()
-                print(row)
                 reading_id = self._master._temp_sensor_view.displayReadings.item(row)["values"][0]
                 return reading_id
             except (ValueError, IndexError):
