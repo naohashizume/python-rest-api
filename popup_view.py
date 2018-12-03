@@ -102,6 +102,7 @@ class PopupView(tk.Frame):
                        value="OK",
                        variable=self._status_var).place(x=150, y=300)
 
+
         self.radio_high = tk.Radiobutton(self._parent,
                        text="HIGH",
                        value="HIGH",
