@@ -12,6 +12,7 @@ from bottom_navbar_view import BottomNavbarView
 from popup_view import PopupView
 
 
+
 class MainAppController(tk.Frame):
     """ Main Application for GUI """
 
@@ -44,8 +45,8 @@ class MainAppController(tk.Frame):
             self._curr_page = TopNavbarView.TEMP_PAGE
 
     def _page_popup_callback(self):
-        self._popup_win = tk.Toplevel()
-        self._popup = PopupView(self._popup_win, self._close_popup_callback)
+        self._popup_win = tk.Toplevel(self)
+        self._popup = PopupView(self._popup_win, self._close_popup_callback, self)
 
     def _close_popup_callback(self):
         self._popup_win.destroy()
@@ -67,4 +68,3 @@ if __name__ == "__main__":
     root.wm_geometry("800x500")
     root.title("Main App Controller")
     root.mainloop()
-
