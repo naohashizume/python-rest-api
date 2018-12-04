@@ -21,11 +21,12 @@ class AbstractReadingManager():
 
 
     def add_reading(self, new_reading):
-        """ Add a new reading to SQL database """
+        """ Add a new reading to SQL database, TODO: validate"""
+
         session = self.DBSession()
         session.add(new_reading)
         session.commit()
-        return
+        return new_reading
 
 
     def get_reading(self, id):
