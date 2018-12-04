@@ -26,6 +26,7 @@ class AbstractReadingManager():
         session = self.DBSession()
         session.add(new_reading)
         session.commit()
+        session.close()
         return new_reading
 
 
