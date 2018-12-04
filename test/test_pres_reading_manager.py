@@ -99,7 +99,15 @@ class TestPressureReadingManager(TestCase):
 
     def test_update_reading_valid(self):
         """ 030A - Valid Update Reading """
-        pass
+        # new_reading = PressureReading(datetime.datetime.strptime("2018-09-23 19:59", "%Y-%m-%d %H:%M"),
+        #                           "ABC Sensor New Pres M100",
+        #                           float(50.513),
+        #                           float(51.745),
+        #                           float(53.105),
+        #                           "OK")
+        # self.test_pres_manager.update_reading(1, new_reading)
+        # updated_reading = self.test_pres_manager.get_reading(1)
+        # self.assertEqual(new_reading.to_dict(), updated_reading.to_dict())
 
     def test_update_reading_invalid(self):
         """ 030B - Invalid Update Reading """
