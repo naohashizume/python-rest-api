@@ -6,9 +6,13 @@
 
 import tkinter as tk
 import tkinter.ttk
+import requests
 import datetime
 from manager.pressure_reading_manager import PressureReadingManager
-db_name = "sqlite:///readings.sqlite"
+
+# db_name = "sqlite:///readings.sqlite"
+API_ENDPOINT = "http://127.0.0.1:5000/sensor/"
+PRES_READING_SUFFIX = "pressure/reading/all"
 
 class PressureSensorView(tk.Frame):
     """ TODO: Explain about this file """
@@ -82,22 +86,24 @@ class PressureSensorView(tk.Frame):
             item_list = self.displayReadings.get_children()
             for item in item_list:
                 self.displayReadings.delete(item)
-        db = PressureReadingManager(db_name)
-        temp_readings = db.get_all_readings()
-        for reading in temp_readings:
+        get_all_url = API_ENDPOINT + PRES_READING_SUFFIX
+        response = requests.get(get_all_url)
+        pres_readings = response.json()
+        for reading in pres_readings:
             self.displayReadings.insert("", "end", values=[reading["id"], reading["timestamp"], reading["model"],
                                                            reading["min_reading"], reading["avg_reading"],
                                                            reading["max_reading"], reading["status"]])
 
-        # self.displayReadings.insert("", "end",
-        #                             values=[len(self.displayReadings.get_children("")) + 1,
-        #                                     datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-        #                                     "ABC Sensor Pres M301A",
-        #                                     20.152,
-        #                                     21.367,
-        #                                     22.005,
-        #                                     "OK"])
 
-
-
-
+    # def update_readings(self):
+    #   """ Old update  """
+    #     if len(self.displayReadings.get_children()) != 0:
+    #         item_list = self.displayReadings.get_children()
+    #         for item in item_list:
+    #             self.displayReadings.delete(item)
+    #     db = PressureReadingManager(db_name)
+    #     temp_readings = db.get_all_readings()
+    #     for reading in temp_readings:
+    #         self.displayReadings.insert("", "end", values=[reading["id"], reading["timestamp"], reading["model"],
+    #                                                        reading["min_reading"], reading["avg_reading"],
+    #                                                        reading["max_reading"], reading["status"]])

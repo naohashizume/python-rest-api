@@ -6,9 +6,13 @@
 
 import tkinter as tk
 import tkinter.ttk
+import requests
 import datetime
 from manager.temperature_reading_manager import TemperatureReadingManager
 db_name = "sqlite:///readings.sqlite"
+
+API_ENDPOINT = "http://127.0.0.1:5000/sensor/"
+TEMP_READING_SUFFIX = "temperature/reading/all"
 
 class TempSensorView(tk.Frame):
     """ TODO: Explain about this file """
@@ -83,8 +87,9 @@ class TempSensorView(tk.Frame):
             item_list = self.displayReadings.get_children()
             for item in item_list:
                 self.displayReadings.delete(item)
-        db = TemperatureReadingManager(db_name)
-        temp_readings = db.get_all_readings()
+        get_all_url = API_ENDPOINT + TEMP_READING_SUFFIX
+        response = requests.get(get_all_url)
+        temp_readings = response.json()
         for reading in temp_readings:
             self.displayReadings.insert("", "end", values=[reading["id"], reading["timestamp"], reading["model"], reading["min_reading"], reading["avg_reading"], reading["max_reading"], reading["status"]])
 

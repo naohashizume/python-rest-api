@@ -23,7 +23,7 @@ class MainAppController(tk.Frame):
 
         self._testvalue = "Test!"
 
-        self._top_navbar = TopNavbarView(self, self._page_callback)
+        self._top_navbar = TopNavbarView(self, self._temp_page_callback, self._pres_page_callback)
         self._temp_sensor_view = TempSensorView(self, self._page1_submit_callback)
         self._pres_sensor_view = PressureSensorView(self, self._page2_submit_callback)
         self._bottom_navbar = BottomNavbarView(self,self._page_popup_callback, self._update_popup_callback, self._quit_callback)
@@ -34,16 +34,18 @@ class MainAppController(tk.Frame):
         self._curr_page = TopNavbarView.TEMP_PAGE
         self._bottom_navbar.grid(row=2, columnspan=4, pady=10)
 
-    def _page_callback(self):
+    def _temp_page_callback(self):
         """ Handle Switching Between Pages """
+        if (self._curr_page == TopNavbarView.PRES_PAGE):
+            self._pres_sensor_view.grid_forget()
+            self._temp_sensor_view.grid(row=1, columnspan=4, pady=10)
+            self._curr_page = TopNavbarView.TEMP_PAGE
+
+    def _pres_page_callback(self):
         if (self._curr_page == TopNavbarView.TEMP_PAGE):
             self._temp_sensor_view.grid_forget()
-            self._pres_sensor_view.grid(row=1, columnspan=4)
+            self._pres_sensor_view.grid(row=1, columnspan=4, pady=10)
             self._curr_page = TopNavbarView.PRES_PAGE
-        elif (self._curr_page == TopNavbarView.PRES_PAGE):
-            self._pres_sensor_view.grid_forget()
-            self._temp_sensor_view.grid(row=1, columnspan=4)
-            self._curr_page = TopNavbarView.TEMP_PAGE
 
     def _page_popup_callback(self):
         self._popup_win = tk.Toplevel(self)
