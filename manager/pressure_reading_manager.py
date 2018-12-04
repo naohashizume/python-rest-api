@@ -25,6 +25,7 @@ class PressureReadingManager(AbstractReadingManager):
         """ Get a reading from the SQL database by id """
         session = self.DBSession()
         reading = session.query(PressureReading).filter(PressureReading.id == id).first()
+        session.close()
         if reading is not None:
             return reading
         else:
@@ -35,6 +36,7 @@ class PressureReadingManager(AbstractReadingManager):
         """ Get all readings from the SQL database """
         session = self.DBSession()
         readings = session.query(PressureReading).all()
+        session.close()
         if readings is not None:
             dict_list = []
             for reading in readings:
@@ -48,6 +50,7 @@ class PressureReadingManager(AbstractReadingManager):
         """ Delete reading from the SQL database by id """
         session = self.DBSession()
         del_reading = session.query(PressureReading).filter(PressureReading.id == id).first()
+        session.close()
         if del_reading is not None:
             session.delete(del_reading)
             session.commit()
@@ -60,6 +63,7 @@ class PressureReadingManager(AbstractReadingManager):
         """ Update reading in the SQL database by id"""
         session = self.DBSession()
         update_reading = session.query(PressureReading).filter(PressureReading.id == id).first()
+        session.close()
 
         if update_reading is not None:
             new_reading_dict = new_reading.to_dict()
