@@ -4,13 +4,20 @@
 #
 # Author:  Nao Hashizume, Matt Harrison Set 2B
 
+import requests
 import tkinter as tk
 from tkinter import messagebox as tkMessageBox
 
+API_ENDPOINT = "http://127.0.0.1:5000/sensor/"
+TEMP_READING_SUFFIX = "temperature/reading/"
+PRES_READING_SUFFIX = "pressure/reading/"
 
 class UpdatePopupView(tk.Frame):
     """ Update Popup Window """
 
+    SELECT_OK = "OK"
+    SELECT_LOW = "LOW"
+    SELECT_HIGH = "HIGH"
     TEMP_PAGE = 1
     PRES_PAGE = 2
 
@@ -20,10 +27,11 @@ class UpdatePopupView(tk.Frame):
         self._parent = parent
         self._parent.geometry("500x500")
         self._parent.title("Update Selected Reading")
-        self._page = tk.IntVar()
+        self._status_var = tk.StringVar(value=None)
         self._close_popup_callback = close_popup_callback
         self._master = master
         self._create_widgets()
+        self._populate_entry_fields()
 
     def _create_widgets(self):
         """ Creates the widgets for the nav bar """
@@ -37,8 +45,8 @@ class UpdatePopupView(tk.Frame):
         self.label_selected_id.place(x=10, y=50)
 
         self.entry_selected_id = tk.Entry(self._parent)
-        self.entry_selected_id.insert(0, self.get_selected_id())
-        self.entry_selected_id.config(state=tk.DISABLED)
+        # self.entry_selected_id.insert(0, self.get_selected_id())
+        # self.entry_selected_id.config(state=tk.DISABLED)
         self.entry_selected_id.place(x=150, y=50)
 
 
@@ -96,25 +104,24 @@ class UpdatePopupView(tk.Frame):
                  text="Choose Status:",
                  width=20).place(x=10, y=350)
 
-        tk.Radiobutton(self._parent,
-                       text="OK/GOOD", # add command=
-                       value=1,
-                       variable=self._page).place(x=150, y=350)
+        self.radio_ok = tk.Radiobutton(self._parent,
+                       text="OK",
+                       value="OK",
+                       variable=self._status_var).place(x=150, y=350)
 
-        tk.Radiobutton(self._parent,
-                       text="HIGH", # add command=
-                       value=2,
-                       variable=self._page).place(x=250, y=350)
+        self.radio_high = tk.Radiobutton(self._parent,
+                       text="HIGH",
+                       value="HIGH",
+                       variable=self._status_var).place(x=250, y=350)
 
-        tk.Radiobutton(self._parent,
-                       text="LOW", # add command=
-                       value=3,
-                       variable=self._page).place(x=350, y=350)
+        self.radio_low = tk.Radiobutton(self._parent,
+                       text="LOW",
+                       value="LOW",
+                       variable=self._status_var).place(x=350, y=350)
 
         self._update_button = tk.Button(self._parent,
-                                 text="Update",
+                                 text="Update", command=self.update_reading)
 
-                                )
         self._update_button.place(x=100, y=400)
 
         self._close_button = tk.Button(self._parent,
@@ -124,17 +131,83 @@ class UpdatePopupView(tk.Frame):
         self._close_button.place(x=200, y=400)
 
 
-    def get_selected_id(self):
-        """"""
+    def update_reading(self):
+        update_timestamp = self.entry_1.get()
+        update_model = self.entry_2.get()
+        update_min_reading = self.entry_3.get()
+        update_avg_reading = self.entry_4.get()
+        update_max_reading = self.entry_5.get()
+        update_new_status = self._status_var.get()
+        reading_data = {"timestamp": update_timestamp, "model": update_model, "min_reading": update_min_reading,
+                        "avg_reading": update_avg_reading, "max_reading": update_max_reading, "status": update_new_status}
         if self._master._curr_page == UpdatePopupView.TEMP_PAGE:
-            try:
-                row = self._master._temp_sensor_view.displayReadings.focus()
-                reading_id = self._master._temp_sensor_view.displayReadings.item(row)["values"][0]
-                return reading_id
-            except (ValueError, IndexError):
-                tkMessageBox.showerror("Error", "Please select a row to update.")
+            put_url = API_ENDPOINT + TEMP_READING_SUFFIX + str(self.entry_selected_id.get())
+            headers = {"content-type": "application/json"}
+            response = requests.put(put_url, json=reading_data, headers=headers)
+            self._master._temp_sensor_view.update_readings()
+        elif self._master._curr_page == UpdatePopupView.PRES_PAGE:
+            put_url = API_ENDPOINT + PRES_READING_SUFFIX + str(self.entry_selected_id.get())
+            headers = {"content-type": "application/json"}
+            response = requests.put(put_url, json=reading_data, headers=headers)
+            self._master._pres_sensor_view.update_readings()
+
+
+    def _populate_entry_fields(self):
+        """ Private method called in __init__ to populate entry fields with reading data"""
+        if self._master._curr_page == UpdatePopupView.TEMP_PAGE:
+            # Get values from selected row
+            row = self._master._temp_sensor_view.displayReadings.focus()
+            reading_id = self._master._temp_sensor_view.displayReadings.item(row)["values"][0]
+            reading_timestamp = self._master._temp_sensor_view.displayReadings.item(row)["values"][1]
+            reading_model = self._master._temp_sensor_view.displayReadings.item(row)["values"][2]
+            reading_min_reading = self._master._temp_sensor_view.displayReadings.item(row)["values"][3]
+            reading_avg_reading = self._master._temp_sensor_view.displayReadings.item(row)["values"][4]
+            reading_max_reading = self._master._temp_sensor_view.displayReadings.item(row)["values"][5]
+            reading_status = self._master._temp_sensor_view.displayReadings.item(row)["values"][6]
+
+            # Assign values to entry fields. Locks reading id
+            self.entry_selected_id.insert(0, reading_id)
+            self.entry_selected_id.config(state=tk.DISABLED)
+            self.entry_1.insert(0, reading_timestamp)
+            self.entry_2.insert(0, reading_model)
+            self.entry_3.insert(0, reading_min_reading)
+            self.entry_4.insert(0, reading_avg_reading)
+            self.entry_5.insert(0, reading_max_reading)
+            self._status_var.set(reading_status)
 
         elif self._master._curr_page == UpdatePopupView.PRES_PAGE:
+            # Get values from selected row
             row = self._master._pres_sensor_view.displayReadings.focus()
             reading_id = self._master._pres_sensor_view.displayReadings.item(row)["values"][0]
-            return reading_id
+            reading_timestamp = self._master._pres_sensor_view.displayReadings.item(row)["values"][1]
+            reading_model = self._master._pres_sensor_view.displayReadings.item(row)["values"][2]
+            reading_min_reading = self._master._pres_sensor_view.displayReadings.item(row)["values"][3]
+            reading_avg_reading = self._master._pres_sensor_view.displayReadings.item(row)["values"][4]
+            reading_max_reading = self._master._pres_sensor_view.displayReadings.item(row)["values"][5]
+            reading_status = self._master._pres_sensor_view.displayReadings.item(row)["values"][6]
+
+            # Assign values to entry fields. Locks reading id
+            self.entry_selected_id.insert(0, reading_id)
+            self.entry_selected_id.config(state=tk.DISABLED)
+            self.entry_1.insert(0, reading_timestamp)
+            self.entry_2.insert(0, reading_model)
+            self.entry_3.insert(0, reading_min_reading)
+            self.entry_4.insert(0, reading_avg_reading)
+            self.entry_5.insert(0, reading_max_reading)
+            self._status_var.set(reading_status)
+
+
+    # def get_selected_id(self):
+    #     """"""
+    #     if self._master._curr_page == UpdatePopupView.TEMP_PAGE:
+    #         try:
+    #             row = self._master._temp_sensor_view.displayReadings.focus()
+    #             reading_id = self._master._temp_sensor_view.displayReadings.item(row)["values"][0]
+    #             return reading_id
+    #         except (ValueError, IndexError):
+    #             tkMessageBox.showerror("Error", "Please select a row to update.")
+    #
+    #     elif self._master._curr_page == UpdatePopupView.PRES_PAGE:
+    #         row = self._master._pres_sensor_view.displayReadings.focus()
+    #         reading_id = self._master._pres_sensor_view.displayReadings.item(row)["values"][0]
+    #         return reading_id

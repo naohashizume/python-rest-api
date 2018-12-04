@@ -12,12 +12,13 @@ class TopNavbarView(tk.Frame):
     TEMP_PAGE = 1
     PRES_PAGE = 2
 
-    def __init__(self, parent, page_callback):
+    def __init__(self, parent, temp_page_callback, pres_page_callback):
         """ Initialize the nav bar """
         tk.Frame.__init__(self, parent)
         self._parent = parent
 
-        self._page_callback = page_callback
+        self._temp_page_callback = temp_page_callback
+        self._pres_page_callback = pres_page_callback
         self._page = tk.IntVar()
         self._create_widgets()
 
@@ -29,14 +30,14 @@ class TopNavbarView(tk.Frame):
         tk.Radiobutton(self,
                        text="temperature",
                        variable=self._page,
-                       command=self._page_callback,
+                       command=self._temp_page_callback,
                        value=1).grid(row=0, column=1)
 
 
         tk.Radiobutton(self,
                        text="pressure",
                        variable=self._page,
-                       command=self._page_callback,
+                       command=self._pres_page_callback,
                        value=2).grid(row=0, column=2)
         #
         # tk.Button(self,
