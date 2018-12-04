@@ -18,13 +18,14 @@ class TestPressureReadingManager(TestCase):
     """ Unit Tests for the Pressure Reading Manager Class """
 
     DROP_TABLE_STATEMENT = "DROP TABLE pressure_reading"
-    DATABASE_NAME =  "sqlite:///readings.sqlite"
+    DATABASE_NAME =  "sqlite:///test_pres_reading.sqlite"
     TEST_TIMESTAMP = "2018-12-03 8:30"
     TEST_MODEL = "ABC Sensor Press M100"
     TEST_MIN_VALUE = 49.213
     TEST_AVG_VALUE = 50.111
     TEST_MAX_VALUE = 52.567
-    TEST_STATUS = "GOOD"
+    TEST_STATUS = "OK"
+    DATE_FORMAT = "%Y-%m-%d %H:%M"
 
     def setUp(self):
         """ Called once, before any tests """
@@ -44,11 +45,17 @@ class TestPressureReadingManager(TestCase):
         conn.commit()
         conn.close()
         self.test_pres_manager = PressureReadingManager(TestPressureReadingManager.DATABASE_NAME)
+        test_reading = PressureReading(datetime.datetime.strptime(TestPressureReadingManager.TEST_TIMESTAMP, TestPressureReadingManager.DATE_FORMAT),
+                                      TestPressureReadingManager.TEST_MODEL,
+                                      TestPressureReadingManager.TEST_MIN_VALUE,
+                                      TestPressureReadingManager.TEST_AVG_VALUE,
+                                      TestPressureReadingManager.TEST_MAX_VALUE,
+                                      TestPressureReadingManager.TEST_STATUS)
         self.logPoint()
 
     def tearDown(self):
         """ Called once, after all tests, if setUp class successful """
-        self.test_pres_manager.session.close()
+        # self.test_pres_manager.session.close()
         self.test_pres_manager = None
         os.remove("test_pres_reading.sqlite")
         self.logPoint()
@@ -71,12 +78,7 @@ class TestPressureReadingManager(TestCase):
 
     def test_add_reading_valid(self):
         """ 020A - Valid Add Reading """
-        new_reading = PressureReading(datetime.datetime.strptime(TestPressureReadingManager.TEST_TIMESTAMP, "%"),
-                                      TestPressureReadingManager.TEST_MODEL,
-                                      TestPressureReadingManager.TEST_MIN_VALUE,
-                                      TestPressureReadingManager.TEST_AVG_VALUE,
-                                      TestPressureReadingManager.TEST_MAX_VALUE,
-                                      TestPressureReadingManager.TEST_STATUS)
+        pass
 
 
 
