@@ -27,6 +27,7 @@ class TestPressureReadingManager(TestCase):
     TEST_STATUS = "OK"
     DATE_FORMAT = "%Y-%m-%d %H:%M"
 
+
     def setUp(self):
         """ Called once, before any tests """
         conn = sqlite3.connect("test_pres_reading.sqlite")
@@ -45,12 +46,13 @@ class TestPressureReadingManager(TestCase):
         conn.commit()
         conn.close()
         self.test_pres_manager = PressureReadingManager(TestPressureReadingManager.DATABASE_NAME)
-        test_reading = PressureReading(datetime.datetime.strptime(TestPressureReadingManager.TEST_TIMESTAMP, TestPressureReadingManager.DATE_FORMAT),
+        test_pres_reading = PressureReading(datetime.datetime.strptime(TestPressureReadingManager.TEST_TIMESTAMP, TestPressureReadingManager.DATE_FORMAT),
                                       TestPressureReadingManager.TEST_MODEL,
                                       TestPressureReadingManager.TEST_MIN_VALUE,
                                       TestPressureReadingManager.TEST_AVG_VALUE,
                                       TestPressureReadingManager.TEST_MAX_VALUE,
                                       TestPressureReadingManager.TEST_STATUS)
+        self.test_pres_manager.add_reading(test_pres_reading)
         self.logPoint()
 
     def tearDown(self):
@@ -78,14 +80,22 @@ class TestPressureReadingManager(TestCase):
 
     def test_add_reading_valid(self):
         """ 020A - Valid Add Reading """
-        pass
-
-
-
+        new_reading = PressureReading(datetime.datetime.strptime(TestPressureReadingManager.TEST_TIMESTAMP, TestPressureReadingManager.DATE_FORMAT),
+                                      TestPressureReadingManager.TEST_MODEL,
+                                      TestPressureReadingManager.TEST_MIN_VALUE,
+                                      TestPressureReadingManager.TEST_AVG_VALUE,
+                                      TestPressureReadingManager.TEST_MAX_VALUE,
+                                      TestPressureReadingManager.TEST_STATUS)
+        added_reading = self.test_pres_manager.add_reading(new_reading)
+        self.assertEqual(new_reading, added_reading)
+        rows = len(self.test_pres_manager.get_all_readings())
+        self.assertEqual(rows, 2)
 
     def test_add_reading_invalid(self):
         """ 020B - Invalid Add Reading """
-        pass
+        with self.assertRaises(ValueError):
+            self.test_pres_manager.add_reading(None)
+            self.test_pres_manager.add_reading("")
 
     def test_update_reading_valid(self):
         """ 030A - Valid Update Reading """
