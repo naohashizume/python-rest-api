@@ -26,6 +26,7 @@ class TestPressureReadingManager(TestCase):
     TEST_MAX_VALUE = 52.567
     TEST_STATUS = "GOOD"
 
+
     def setUp(self):
         """ Called once, before any tests """
         conn = sqlite3.connect("test_pres_reading.sqlite")
@@ -48,7 +49,7 @@ class TestPressureReadingManager(TestCase):
 
     def tearDown(self):
         """ Called once, after all tests, if setUp class successful """
-        self.test_pres_manager.session.close()
+        # self.test_pres_manager.session.close()
         self.test_pres_manager = None
         os.remove("test_pres_reading.sqlite")
         self.logPoint()
@@ -71,12 +72,12 @@ class TestPressureReadingManager(TestCase):
 
     def test_add_reading_valid(self):
         """ 020A - Valid Add Reading """
-        new_reading = PressureReading(datetime.datetime.strptime(TestPressureReadingManager.TEST_TIMESTAMP, "%"),
-                                      TestPressureReadingManager.TEST_MODEL,
-                                      TestPressureReadingManager.TEST_MIN_VALUE,
-                                      TestPressureReadingManager.TEST_AVG_VALUE,
-                                      TestPressureReadingManager.TEST_MAX_VALUE,
-                                      TestPressureReadingManager.TEST_STATUS)
+        # new_reading = PressureReading(datetime.datetime.strptime(TestPressureReadingManager.TEST_TIMESTAMP, "%"),
+        #                               TestPressureReadingManager.TEST_MODEL,
+        #                               TestPressureReadingManager.TEST_MIN_VALUE,
+        #                               TestPressureReadingManager.TEST_AVG_VALUE,
+        #                               TestPressureReadingManager.TEST_MAX_VALUE,
+        #                               TestPressureReadingManager.TEST_STATUS)
 
 
 
