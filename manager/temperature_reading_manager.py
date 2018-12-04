@@ -60,7 +60,6 @@ class TemperatureReadingManager(AbstractReadingManager):
         """ Update a temperature reading from the SQL database by id"""
         session = self.DBSession()
         update_reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
-        session.close()
 
         if update_reading is not None:
             new_reading_dict = new_reading.to_dict()
@@ -71,6 +70,7 @@ class TemperatureReadingManager(AbstractReadingManager):
             update_reading.max_reading = new_reading_dict["max_reading"]
             update_reading.status = new_reading_dict["status"]
             session.commit()
+            session.close()
             return True
         else:
             return False
