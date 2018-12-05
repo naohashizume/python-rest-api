@@ -18,6 +18,8 @@ from flask import Flask
 from flask import request
 app = Flask(__name__)
 
+TEMPERATURE_SENSOR = "temperature"
+PRESSURE_SENSOR = "pressure"
 TIMESTAMP = "timestamp"
 MODEL = "model"
 MIN_READING = "min_reading"
@@ -33,7 +35,7 @@ FAILURE_RESPONSE_CODE = 400
 def add_reading(sensor_type):
     """API call to add a new sensor reading to the reading manager"""
     try:
-        if sensor_type == "temperature":
+        if sensor_type == TEMPERATURE_SENSOR:
             temp_sensor = TemperatureReadingManager(db_name)
             json_reading = request.get_json()
             timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
@@ -48,7 +50,7 @@ def add_reading(sensor_type):
             )
             return response
 
-        elif sensor_type == "pressure":
+        elif sensor_type == PRESSURE_SENSOR:
             press_sensor = PressureReadingManager(db_name)
             json_reading = request.get_json()
             timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
@@ -81,7 +83,7 @@ def add_reading(sensor_type):
 def update_reading(sensor_type, id):
     """API call to update a reading in the reading manager"""
     try:
-        if sensor_type == "temperature":
+        if sensor_type == TEMPERATURE_SENSOR:
             press_sensor = TemperatureReadingManager(db_name)
             json_reading = request.get_json()
             timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
@@ -96,7 +98,7 @@ def update_reading(sensor_type, id):
             )
             return response
 
-        elif sensor_type == "pressure":
+        elif sensor_type == PRESSURE_SENSOR:
             press_sensor = PressureReadingManager(db_name)
             json_reading = request.get_json()
             timestamp = datetime.datetime.strptime(json_reading[TIMESTAMP], DATE_FORMAT)
@@ -130,7 +132,7 @@ def update_reading(sensor_type, id):
 def get_reading(sensor_type, id):
     """API call to retrieve a reading from the reading manager using sequence number"""
     try:
-        if sensor_type == "temperature":
+        if sensor_type == TEMPERATURE_SENSOR:
             temp_sensor = TemperatureReadingManager(db_name)
             reading = temp_sensor.get_reading(id)
             json_reading = reading.to_json()
@@ -141,7 +143,7 @@ def get_reading(sensor_type, id):
             )
             return response
 
-        elif sensor_type == "pressure":
+        elif sensor_type == PRESSURE_SENSOR:
             press_sensor = PressureReadingManager(db_name)
             reading = press_sensor.get_reading(id)
             json_reading = reading.to_json()
@@ -170,7 +172,7 @@ def get_reading(sensor_type, id):
 @app.route('/sensor/<string:sensor_type>/reading/all', methods=['GET'])
 def get_all_readings(sensor_type):
     """API call to retrieve all readings from the reading manager"""
-    if sensor_type == "temperature":
+    if sensor_type == TEMPERATURE_SENSOR:
         temp_sensor = TemperatureReadingManager(db_name)
         readings_list = temp_sensor.get_all_readings()
         json_readings = json.dumps(readings_list)
@@ -181,7 +183,7 @@ def get_all_readings(sensor_type):
         )
         return response
 
-    elif sensor_type == "pressure":
+    elif sensor_type == PRESSURE_SENSOR:
         press_sensor = PressureReadingManager(db_name)
         readings_list = press_sensor.get_all_readings()
         json_readings = json.dumps(readings_list)
@@ -204,7 +206,7 @@ def get_all_readings(sensor_type):
 def delete_reading(sensor_type, id):
     """API call to delete a reading from the reading manager using sequence number"""
     try:
-        if sensor_type == "temperature":
+        if sensor_type == TEMPERATURE_SENSOR:
             temp_sensor = TemperatureReadingManager(db_name)
             temp_sensor.delete_reading(id)
             response = app.response_class(
@@ -214,7 +216,7 @@ def delete_reading(sensor_type, id):
             )
             return response
 
-        elif sensor_type == "pressure":
+        elif sensor_type == PRESSURE_SENSOR:
             press_sensor = PressureReadingManager(db_name)
             press_sensor.delete_reading(id)
             response = app.response_class(
