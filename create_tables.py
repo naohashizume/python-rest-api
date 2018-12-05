@@ -8,9 +8,9 @@ c.execute('''
           (id INTEGER PRIMARY KEY ASC,
            timestamp DATETIME NOT NULL,
            model VARCHAR(250) NOT NULL,
-           min_reading NUMBER NOT NULL,
-           avg_reading NUMBER NOT NULL,
-           max_reading NUMBER NOT NULL,
+           min_reading FLOAT(3) NOT NULL,
+           avg_reading FLOAT(3) NOT NULL,
+           max_reading FLOAT(3) NOT NULL,
            status VARCHAR(250) NOT NULL
           )
           ''')
@@ -19,9 +19,9 @@ c.execute('''
           (id INTEGER PRIMARY KEY ASC,
            timestamp DATETIME NOT NULL,
            model VARCHAR(250) NOT NULL,
-           min_reading NUMBER NOT NULL,
-           avg_reading NUMBER NOT NULL,
-           max_reading NUMBER NOT NULL,
+           min_reading FLOAT(3) NOT NULL,
+           avg_reading FLOAT(3) NOT NULL,
+           max_reading FLOAT(3) NOT NULL,
            status VARCHAR(250) NOT NULL
           )
           ''')

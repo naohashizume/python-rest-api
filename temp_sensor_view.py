@@ -91,6 +91,7 @@ class TempSensorView(tk.Frame):
         response = requests.get(get_all_url)
         temp_readings = response.json()
         for reading in temp_readings:
+            print(reading)
             self.displayReadings.insert("", "end", values=[reading["id"], reading["timestamp"], reading["model"], reading["min_reading"], reading["avg_reading"], reading["max_reading"], reading["status"]])
 
 

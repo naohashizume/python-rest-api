@@ -20,4 +20,4 @@ class ErrorPopupView(tk.Frame):
 
     def _create_widgets(self):
         """ Creates the widgets for the nav bar """
-        tkMessageBox.showerror("Error", "The input data is invalid, Can you try again?")
+        tkMessageBox.showerror("Error", "Input data is invalid, please try again.")

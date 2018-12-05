@@ -72,5 +72,5 @@ if __name__ == "__main__":
     root = tk.Tk()
     MainAppController(root).pack(side=tk.TOP, fill=tk.BOTH, expand=True)
     root.wm_geometry("800x400")
-    root.title("Main App Controller")
+    root.title("Sensor Reading Manager - v1.0")
     root.mainloop()

@@ -45,56 +45,56 @@ class PopupView(tk.Frame):
         self.label_title.place(x=150, y=10)
 
         # label - timestamp
-        self.label_1 = tk.Label(self._parent, text="Timestamp :", width=20)
-        self.label_1.place(x=10, y=50)
+        self.timestamp_label = tk.Label(self._parent, text="Timestamp :", width=20)
+        self.timestamp_label.place(x=10, y=50)
         # entry - timestamp
-        self.entry_1 = tk.Entry(self._parent)
-        self.entry_1.place(x=150, y=50)
+        self.timestamp_entry = tk.Entry(self._parent)
+        self.timestamp_entry.place(x=150, y=50)
         # label - example of timestamp
-        self.label_eg_1 = tk.Label(self._parent, text="eg) 2018-12-01 19:10", width=20)
-        self.label_eg_1.place(x=300, y=50)
+        self.timestamp_eg = tk.Label(self._parent, text="eg) 2018-12-01 19:10", width=20)
+        self.timestamp_eg.place(x=300, y=50)
 
         # label2 - model
-        self.label_2 = tk.Label(self._parent, text="Sensor Model :", width=20)
-        self.label_2.place(x=10, y=100)
+        self.model_label = tk.Label(self._parent, text="Sensor Model :", width=20)
+        self.model_label.place(x=10, y=100)
         # entry - model
-        self.entry_2 = tk.Entry(self._parent)
-        self.entry_2.place(x=150, y=100)
+        self.model_entry = tk.Entry(self._parent)
+        self.model_entry.place(x=150, y=100)
         # label - example of model
-        self.label_eg_2 = tk.Label(self._parent, text="eg) ABC Sensor Temp M301A", width=25)
-        self.label_eg_2.place(x=305, y=100)
+        self.model_eg = tk.Label(self._parent, text="eg) ABC Sensor Temp M301A", width=25)
+        self.model_eg.place(x=305, y=100)
 
         # label3 - min_reading
-        self.label_3 = tk.Label(self._parent, text="Min Reading :", width=20)
-        self.label_3.place(x=10, y=150)
+        self.min_label = tk.Label(self._parent, text="Min Reading :", width=20)
+        self.min_label.place(x=10, y=150)
         # entry - min_reading
-        self.entry_3 = tk.Entry(self._parent)
-        self.entry_3.place(x=150, y=150)
+        self.min_entry = tk.Entry(self._parent)
+        self.min_entry.place(x=150, y=150)
         # label - example of min_reading
-        self.label_eg_3 = tk.Label(self._parent, text="eg) 20.152", width=20)
-        self.label_eg_3.place(x=272, y=150)
+        self.min_eg = tk.Label(self._parent, text="eg) 20.152", width=20)
+        self.min_eg.place(x=272, y=150)
 
         # label4 - avg_reading
-        self.label_4 = tk.Label(self._parent, text="Avg Reading :", width=20)
-        self.label_4.place(x=10, y=200)
+        self.avg_label = tk.Label(self._parent, text="Avg Reading :", width=20)
+        self.avg_label.place(x=10, y=200)
         # entry - avg_reading
-        self.entry_4 = tk.Entry(self._parent)
-        self.entry_4.place(x=150, y=200)
+        self.avg_entry = tk.Entry(self._parent)
+        self.avg_entry.place(x=150, y=200)
         # label - example of avg_reading
-        self.label_eg_4 = tk.Label(self._parent, text="eg) 21.367", width=20)
-        self.label_eg_4.place(x=272, y=200)
+        self.avg_label = tk.Label(self._parent, text="eg) 21.367", width=20)
+        self.avg_label.place(x=272, y=200)
 
         # label5 - max_reading
-        self.label_5 = tk.Label(self._parent, text="Max Reading :", width=20)
-        self.label_5.place(x=10, y=250)
+        self.max_label = tk.Label(self._parent, text="Max Reading :", width=20)
+        self.max_label.place(x=10, y=250)
         # entry - avg_reading
-        self.entry_5 = tk.Entry(self._parent)
-        self.entry_5.place(x=150, y=250)
+        self.max_entry = tk.Entry(self._parent)
+        self.max_entry.place(x=150, y=250)
         # label - example of avg_reading
-        self.label_eg_5 = tk.Label(self._parent, text="eg) 22.005", width=20)
-        self.label_eg_5.place(x=272, y=250)
+        self.max_eg = tk.Label(self._parent, text="eg) 22.005", width=20)
+        self.max_eg.place(x=272, y=250)
 
-        tk.Label(self._parent,
+        self.status_label = tk.Label(self._parent,
                  text="Choose Status:",
                  width=20).place(x=10, y=300)
 
@@ -128,17 +128,18 @@ class PopupView(tk.Frame):
 
     def add_reading(self):
         """ Add a reading to the database via the API """
-        new_timestamp = self.entry_1.get()
-        new_model = self.entry_2.get()
-        new_min_reading = self.entry_3.get()
-        new_avg_reading = self.entry_4.get()
-        new_max_reading = self.entry_5.get()
+        new_timestamp = self.timestamp_entry.get()
+        new_model = self.model_entry.get()
+        new_min_reading = float(self.min_entry.get())
+        new_avg_reading = float(self.avg_entry.get())
+        new_max_reading = float(self.max_entry.get())
         new_status = self._status_var.get()
         if self._master._curr_page == PopupView.TEMP_PAGE:
             post_url = API_ENDPOINT + TEMP_READING_SUFFIX
             headers = {"content-type": "application/json"}
             reading_data = {"timestamp": new_timestamp, "model": new_model, "min_reading": new_min_reading, "avg_reading": new_avg_reading, "max_reading": new_max_reading, "status": new_status}
             response = requests.post(post_url, json=reading_data, headers=headers)
+            print(reading_data)
             self._master._temp_sensor_view.update_readings()
         elif self._master._curr_page == PopupView.PRES_PAGE:
             post_url = API_ENDPOINT + PRES_READING_SUFFIX
