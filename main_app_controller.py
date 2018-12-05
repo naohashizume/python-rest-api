@@ -56,7 +56,7 @@ class MainAppController(tk.Frame):
         self._popup = UpdatePopupView(self._popup_win, self._close_popup_callback, self)
 
     def _close_popup_callback(self):
-        """ Close a Popup Page """
+        """ Close a Popup Page"""
         self._popup_win.destroy()
 
     def _quit_callback(self):

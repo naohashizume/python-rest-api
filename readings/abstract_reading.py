@@ -30,3 +30,15 @@ class AbstractReading():
         self.max_reading = max_reading
         self.status = status
 
+    def to_dict(self):
+        """ Convert reading to dictionary """
+        reading_data = {
+            "id": self.id,
+            "timestamp": self.timestamp.strftime(AbstractReading.DATE_FORMAT),
+            "model": self.model,
+            "min_reading": self.min_reading,
+            "avg_reading": self.avg_reading,
+            "max_reading": self.max_reading,
+            "status": self.status}
+
+        return reading_data
