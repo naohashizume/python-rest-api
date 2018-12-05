@@ -64,7 +64,7 @@ class BottomNavbarView(tk.Frame):
 
     def delete_entry(self):
         """ Delete an entry from the database via the API"""
-        try :
+        try:
             if tkMessageBox.askyesno('Verify', 'Do you really want to delete?'):
                 # Delete item
                 if self._parent._curr_page == BottomNavbarView.TEMP_PAGE:

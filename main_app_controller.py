@@ -11,6 +11,7 @@ from pres_sensor_view import PressureSensorView
 from bottom_navbar_view import BottomNavbarView
 from popup_view import PopupView
 from update_popup_view import UpdatePopupView
+from tkinter import messagebox as tkMessageBox
 
 
 class MainAppController(tk.Frame):
@@ -52,8 +53,13 @@ class MainAppController(tk.Frame):
 
     def _update_popup_callback(self):
         """ Open Popup for Updating a Reading"""
-        self._popup_win = tk.Toplevel()
-        self._popup = UpdatePopupView(self._popup_win, self._close_popup_callback, self)
+        try:
+            self._popup_win = tk.Toplevel()
+            self._popup = UpdatePopupView(self._popup_win, self._close_popup_callback, self)
+        except IndexError:
+            self._popup_win.destroy()
+            tkMessageBox.showerror("Error", "Please select the row to update.")
+
 
     def _close_popup_callback(self):
         """ Close a Popup Page"""

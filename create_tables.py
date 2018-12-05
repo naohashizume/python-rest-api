@@ -1,3 +1,9 @@
+# create_tables.py
+#
+# Create table
+#
+# Author:  Nao Hashizume, Matt Harrison Set 2B
+
 import sqlite3
 
 conn = sqlite3.connect('readings.sqlite')
