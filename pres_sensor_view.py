@@ -7,10 +7,7 @@
 import tkinter as tk
 import tkinter.ttk
 import requests
-import datetime
-from manager.pressure_reading_manager import PressureReadingManager
 
-# db_name = "sqlite:///readings.sqlite"
 API_ENDPOINT = "http://127.0.0.1:5000/sensor/"
 PRES_READING_SUFFIX = "pressure/reading/all"
 

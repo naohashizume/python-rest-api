@@ -5,7 +5,6 @@
 # Authors: Matt Harrison, Nao Hashizume, Set 2B
 
 from sqlalchemy import Column, Integer, DateTime, String, Float
-import json
 import datetime
 
 class AbstractReading():

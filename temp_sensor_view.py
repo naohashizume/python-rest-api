@@ -7,9 +7,6 @@
 import tkinter as tk
 import tkinter.ttk
 import requests
-import datetime
-from manager.temperature_reading_manager import TemperatureReadingManager
-db_name = "sqlite:///readings.sqlite"
 
 API_ENDPOINT = "http://127.0.0.1:5000/sensor/"
 TEMP_READING_SUFFIX = "temperature/reading/all"

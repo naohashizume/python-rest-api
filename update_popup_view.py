@@ -6,7 +6,6 @@
 
 import requests
 import tkinter as tk
-from tkinter import messagebox as tkMessageBox
 
 API_ENDPOINT = "http://127.0.0.1:5000/sensor/"
 TEMP_READING_SUFFIX = "temperature/reading/"
