@@ -22,7 +22,6 @@ class PressureReadingManager(AbstractReadingManager):
         PressureReadingManager._validate_str_value(PressureReadingManager.DB_NAME, db_name)
         super().__init__(db_name)
 
-
     def get_reading(self, id):
         """ Get a reading from the SQL database by id """
         session = self.DBSession()

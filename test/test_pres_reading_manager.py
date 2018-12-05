@@ -1,6 +1,6 @@
 # test_pres_reading_manager.py
 #
-#  Unit test for Pressure Reading Managaer
+#  Unit test for Pressure Reading Manager
 #
 # Authors: Nao Hashizume, Matt Harrison, Set 2B
 #
@@ -16,6 +16,7 @@ import sqlite3
 class TestPressureReadingManager(TestCase):
     """ Unit Tests for the Pressure Reading Manager Class """
 
+    # Constants
     DROP_TABLE_STATEMENT = "DROP TABLE pressure_reading"
     DATABASE_NAME = "sqlite:///test_pres_reading.sqlite"
     TEST_TIMESTAMP = "2018-12-03 8:30"
@@ -45,11 +46,11 @@ class TestPressureReadingManager(TestCase):
         conn.close()
         self.test_pres_manager = PressureReadingManager(TestPressureReadingManager.DATABASE_NAME)
         test_pres_reading = PressureReading(datetime.datetime.strptime(TestPressureReadingManager.TEST_TIMESTAMP, TestPressureReadingManager.DATE_FORMAT),
-                                      TestPressureReadingManager.TEST_MODEL,
-                                      TestPressureReadingManager.TEST_MIN_VALUE,
-                                      TestPressureReadingManager.TEST_AVG_VALUE,
-                                      TestPressureReadingManager.TEST_MAX_VALUE,
-                                      TestPressureReadingManager.TEST_STATUS)
+                                            TestPressureReadingManager.TEST_MODEL,
+                                            TestPressureReadingManager.TEST_MIN_VALUE,
+                                            TestPressureReadingManager.TEST_AVG_VALUE,
+                                            TestPressureReadingManager.TEST_MAX_VALUE,
+                                            TestPressureReadingManager.TEST_STATUS)
         self.test_pres_manager.add_reading(test_pres_reading)
         self.logPoint()
 
@@ -113,6 +114,7 @@ class TestPressureReadingManager(TestCase):
                                       float(51.745),
                                       float(53.105),
                                       "GOOD")
+
         with self.assertRaises(ValueError):
             self.test_pres_manager.update_reading(None, None)
             self.test_pres_manager.update_reading(1, None)

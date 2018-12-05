@@ -15,17 +15,14 @@ API_ENDPOINT = "http://127.0.0.1:5000/sensor/"
 PRES_READING_SUFFIX = "pressure/reading/all"
 
 class PressureSensorView(tk.Frame):
-    """ TODO: Explain about this file """
+    """ Pressure Sensor Reading View  """
 
     def __init__(self, parent, page_callback):
-        """ Initialize Pressure Sensor Page """
+        """ Initialize Pressure Sensor Reading View """
         tk.Frame.__init__(self, parent)
         self._parent = parent
-
         self._page_callback = page_callback
-
         self._create_widgets()
-
         self.update_readings()
 
     def _create_widgets(self):
@@ -80,8 +77,8 @@ class PressureSensorView(tk.Frame):
         self.scrollbar.pack(side="right", fill="y")
         self.displayReadings.configure(yscrollcommand=self.scrollbar.set)
 
-
     def update_readings(self):
+        """ Refreshes the display of all pressure readings """
         if len(self.displayReadings.get_children()) != 0:
             item_list = self.displayReadings.get_children()
             for item in item_list:

@@ -1,6 +1,6 @@
 # popup_view.py
 #
-# TODO: Explain about this file
+# Popup View for Adding Sensor Reading
 #
 # Author:  Nao Hashizume, Matt Harrison Set 2B
 
@@ -24,14 +24,12 @@ class PopupView(tk.Frame):
     PRES_PAGE = 2
     DATE_FORMAT = "%Y-%m-%d %H:%M"
 
-
     def __init__(self, parent, close_popup_callback, master):
-        """ Initialize the nav bar """
+        """ Initialize the Popup Window """
         tk.Frame.__init__(self, parent)
         self._parent = parent
         self._master = master
         self._parent.geometry("500x400")
-        # self._parent.title("Add New Reading")
         self._status_var = tk.StringVar(value="OK")
         self._close_popup_callback = close_popup_callback
         self._create_widgets()
@@ -125,7 +123,6 @@ class PopupView(tk.Frame):
 
         self._close_button.place(x=200, y=350)
 
-
     def add_reading(self):
         """ Add a reading to the database via the API """
         new_timestamp = self.timestamp_entry.get()
@@ -153,3 +150,5 @@ class PopupView(tk.Frame):
                 self._master._pres_sensor_view.update_readings()
             else:
                 tkMessageBox.showerror("Error", "Input data is invalid, please try again.")
+
+

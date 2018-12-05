@@ -1,6 +1,6 @@
 # test_temp_reading_manager.py
 #
-#  Unit test for Temperature Reading Managaer
+#  Unit test for Temperature Reading Manager
 #
 # Authors: Nao Hashizume, Matt Harrison, Set 2B
 #
@@ -16,6 +16,7 @@ import sqlite3
 class TestTemperatureReadingManager(TestCase):
     """ Unit Tests for the Temperatyre Reading Manager Class """
 
+    # Constants
     DROP_TABLE_STATEMENT = "DROP TABLE pressure_reading"
     DATABASE_NAME = "sqlite:///test_temp_reading.sqlite"
     TEST_TIMESTAMP = "2018-12-03 8:30"
@@ -43,7 +44,7 @@ class TestTemperatureReadingManager(TestCase):
                   ''')
         conn.commit()
         conn.close()
-        self.test_pres_manager = TemperatureReadingManager(TestTemperatureReadingManager.DATABASE_NAME)
+        self.test_temp_manager = TemperatureReadingManager(TestTemperatureReadingManager.DATABASE_NAME)
         test_temp_reading = TemperatureReading(datetime.datetime.strptime(TestTemperatureReadingManager.TEST_TIMESTAMP, TestTemperatureReadingManager.DATE_FORMAT),
                                                TestTemperatureReadingManager.TEST_MODEL,
                                                TestTemperatureReadingManager.TEST_MIN_VALUE,
@@ -67,7 +68,7 @@ class TestTemperatureReadingManager(TestCase):
 
     def test_init_valid(self):
         """ 010A - Valid Construction Parameters """
-        self.assertIsNotNone(TestTemperatureReadingManager(TestTemperatureReadingManager.DATABASE_NAME))
+        self.assertIsNotNone(TemperatureReadingManager(TestTemperatureReadingManager.DATABASE_NAME))
 
     def test_init_invalid(self):
         """ 010B - Invalid Construction Parameters"""
@@ -97,22 +98,22 @@ class TestTemperatureReadingManager(TestCase):
     def test_update_reading_valid(self):
         """ 030A - Valid Update Reading """
         new_reading = TemperatureReading(datetime.datetime.strptime("2018-09-23 19:59", "%Y-%m-%d %H:%M"),
-                                      "ABC Sensor New Temp M100",
-                                      float(21.000),
-                                      float(22.000),
-                                      float(23.000),
-                                      "OK")
+                                         "ABC Sensor New Temp M100",
+                                         float(21.000),
+                                         float(22.000),
+                                         float(23.000),
+                                         "OK")
         updated_reading = self.test_temp_manager.update_reading(1, new_reading)
         self.assertTrue(updated_reading)
 
     def test_update_reading_invalid(self):
         """ 030B - Invalid Update Reading """
         new_reading = TemperatureReading(datetime.datetime.strptime("2018-09-23 19:59", "%Y-%m-%d %H:%M"),
-                                      "ABC Sensor New Temp M100",
-                                      float(21.000),
-                                      float(22.000),
-                                      float(23.000),
-                                      "OK")
+                                         "ABC Sensor New Temp M100",
+                                         float(21.000),
+                                         float(22.000),
+                                         float(23.000),
+                                         "OK")
         with self.assertRaises(ValueError):
             self.test_temp_manager.update_reading(None, None)
             self.test_temp_manager.update_reading(1, None)

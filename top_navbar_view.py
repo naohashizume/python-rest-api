@@ -1,10 +1,11 @@
 # top_navbar_view.py
 #
-# TODO: Explain about this file
+# Top Navigation Bar View
 #
 # Author:  Nao Hashizume, Matt Harrison Set 2B
 
 import tkinter as tk
+
 
 class TopNavbarView(tk.Frame):
     """ Top Navigation Bar """
@@ -33,16 +34,12 @@ class TopNavbarView(tk.Frame):
                        command=self._temp_page_callback,
                        value=1).grid(row=0, column=1)
 
-
         tk.Radiobutton(self,
                        text="pressure",
                        variable=self._page,
                        command=self._pres_page_callback,
                        value=2).grid(row=0, column=2)
-        #
-        # tk.Button(self,
-        #           text="Popup",
-        #           command=self._page_popup_callback).grid(row=0, column=3)
+
 
         self._page.set(1)
 
