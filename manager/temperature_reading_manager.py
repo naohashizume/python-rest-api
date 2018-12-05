@@ -11,23 +11,26 @@ from readings.temperature_reading import TemperatureReading
 class TemperatureReadingManager(AbstractReadingManager):
     """ Temperature Sensor concrete implementation """
 
-    DATE_FORMAT = "%Y-%m-%d %H:%M"
+    DATE_FORMAT = '%Y-%m-%d %H:%M'
+    DB_NAME = "Database Name"
+    ID = "ID"
+    NEW_READING = "New Reading"
 
     def __init__(self, db_name):
-        """ Constructor for PressureSensor Class """
+        """ Constructor for TemperatureReadingManager Class """
+        TemperatureReadingManager._validate_str_value(TemperatureReadingManager.DB_NAME, db_name)
         super().__init__(db_name)
-
 
     def get_reading(self, id):
         """ Get temperature reading from SQL database"""
         session = self.DBSession()
+        TemperatureReadingManager._validate_int_value(TemperatureReadingManager.ID, id)
         reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
         session.close()
         if reading is not None:
             return reading
         else:
             return None
-
 
     def get_all_readings(self):
         """ Get all temperature readings from SQL database """
@@ -42,10 +45,10 @@ class TemperatureReadingManager(AbstractReadingManager):
         else:
             return None
 
-
     def delete_reading(self, id):
         """ Delete a temperature reading from the SQL database by id """
         session = self.DBSession()
+        TemperatureReadingManager._validate_int_value(TemperatureReadingManager.ID, id)
         del_reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
         session.close()
         if del_reading is not None:
@@ -55,12 +58,12 @@ class TemperatureReadingManager(AbstractReadingManager):
         else:
             return False
 
-
     def update_reading(self, id, new_reading):
         """ Update a temperature reading from the SQL database by id"""
         session = self.DBSession()
+        TemperatureReadingManager._validate_int_value(TemperatureReadingManager.ID, id)
         update_reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
-
+        TemperatureReadingManager._validate_inp_value(TemperatureReadingManager.NEW_READING, new_reading)
         if update_reading is not None:
             new_reading_dict = new_reading.to_dict()
             update_reading.timestamp = datetime.datetime.strptime(new_reading_dict["timestamp"], TemperatureReadingManager.DATE_FORMAT)
@@ -74,3 +77,41 @@ class TemperatureReadingManager(AbstractReadingManager):
             return True
         else:
             return False
+
+    @staticmethod
+    def _validate_str_value(display_name, str_value):
+        """ Private helper to validate string values """
+        if str_value is None:
+            raise ValueError(display_name + " cannot be undefined.")
+
+        if str_value == "":
+            raise ValueError(display_name + " cannot be empty.")
+
+        if not isinstance(str_value, str):
+            raise ValueError(display_name + " must be string.")
+
+    @staticmethod
+    def _validate_int_value(display_name, int_value):
+        """ Private helper to validate integer values """
+        if int_value is None:
+            raise ValueError(display_name + " cannot be undefined.")
+
+        if int_value == "":
+            raise ValueError(display_name + " cannot be empty.")
+
+        if not isinstance(int_value, int):
+            raise ValueError(display_name + " must be integer.")
+
+    @staticmethod
+    def _validate_inp_value(display_name, inp_value):
+        """ Private helper to validate input values """
+        if inp_value is None:
+            raise ValueError(display_name + " cannot be undefined.")
+
+        if inp_value == "":
+            raise ValueError(display_name + " cannot be empty.")
+
+
+
+
+

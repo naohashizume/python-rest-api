@@ -1,6 +1,6 @@
 # popup_view.py
 #
-# TODO: Explain about this file
+# Popup View for Adding Sensor Reading
 #
 # Author:  Nao Hashizume, Matt Harrison Set 2B
 
@@ -24,14 +24,12 @@ class PopupView(tk.Frame):
     PRES_PAGE = 2
     DATE_FORMAT = "%Y-%m-%d %H:%M"
 
-
     def __init__(self, parent, close_popup_callback, master):
-        """ Initialize the nav bar """
+        """ Initialize the Popup Window """
         tk.Frame.__init__(self, parent)
         self._parent = parent
         self._master = master
         self._parent.geometry("500x400")
-        # self._parent.title("Add New Reading")
         self._status_var = tk.StringVar(value="OK")
         self._close_popup_callback = close_popup_callback
         self._create_widgets()
@@ -125,7 +123,6 @@ class PopupView(tk.Frame):
 
         self._close_button.place(x=200, y=350)
 
-
     def add_reading(self):
         """ Add a reading to the database via the API """
         new_timestamp = self.timestamp_entry.get()
@@ -148,24 +145,3 @@ class PopupView(tk.Frame):
                             "avg_reading": new_avg_reading, "max_reading": new_max_reading, "status": new_status}
             response = requests.post(post_url, json=reading_data, headers=headers)
             self._master._pres_sensor_view.update_readings()
-
-
-    # def add_reading(self):
-    #     """ Old method to add a reading to the database using direct access to reading and manager classes"""
-    #     new_timestamp = datetime.datetime.strptime(self.entry_1.get(), PopupView.DATE_FORMAT)
-    #     new_model = self.entry_2.get()
-    #     new_min_reading = self.entry_3.get()
-    #     new_avg_reading = self.entry_4.get()
-    #     new_max_reading = self.entry_5.get()
-    #     new_status = self._status_var.get()
-    #     if self._master._curr_page == PopupView.TEMP_PAGE:
-    #         new_reading = TemperatureReading(new_timestamp, new_model, new_min_reading, new_avg_reading, new_max_reading, new_status)
-    #         temp_manager = TemperatureReadingManager(db_name)
-    #         temp_manager.add_reading(new_reading)
-    #         self._master._temp_sensor_view.update_readings()
-    #     elif self._master._curr_page == PopupView.PRES_PAGE:
-    #         new_reading = PressureReading(new_timestamp, new_model, new_min_reading, new_avg_reading,
-    #                                          new_max_reading, new_status)
-    #         temp_manager = PressureReadingManager(db_name)
-    #         temp_manager.add_reading(new_reading)
-    #         self._master._pres_sensor_view.update_readings()

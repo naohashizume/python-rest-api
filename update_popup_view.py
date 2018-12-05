@@ -1,6 +1,6 @@
 # update_popup_view.py
 #
-# Defines the UpdatePopupView class
+# Popup View for updating sensor reading
 #
 # Author:  Nao Hashizume, Matt Harrison Set 2B
 
@@ -48,7 +48,6 @@ class UpdatePopupView(tk.Frame):
         # self.entry_selected_id.insert(0, self.get_selected_id())
         # self.entry_selected_id.config(state=tk.DISABLED)
         self.entry_selected_id.place(x=150, y=50)
-
 
         # label - timestamp
         self.timestamp_label = tk.Label(self._parent, text="Timestamp :", width=20)
@@ -130,8 +129,8 @@ class UpdatePopupView(tk.Frame):
 
         self._close_button.place(x=200, y=400)
 
-
     def update_reading(self):
+        """ Submits an update request to the API """
         update_timestamp = self.timestamp_entry.get()
         update_model = self.model_entry.get()
         update_min_reading = float(self.min_entry.get())
@@ -150,7 +149,6 @@ class UpdatePopupView(tk.Frame):
             headers = {"content-type": "application/json"}
             response = requests.put(put_url, json=reading_data, headers=headers)
             self._master._pres_sensor_view.update_readings()
-
 
     def _populate_entry_fields(self):
         """ Private method called in __init__ to populate entry fields with reading data"""
@@ -195,19 +193,3 @@ class UpdatePopupView(tk.Frame):
             self.avg_entry.insert(0, reading_avg_reading)
             self.max_entry.insert(0, reading_max_reading)
             self._status_var.set(reading_status)
-
-
-    # def get_selected_id(self):
-    #     """"""
-    #     if self._master._curr_page == UpdatePopupView.TEMP_PAGE:
-    #         try:
-    #             row = self._master._temp_sensor_view.displayReadings.focus()
-    #             reading_id = self._master._temp_sensor_view.displayReadings.item(row)["values"][0]
-    #             return reading_id
-    #         except (ValueError, IndexError):
-    #             tkMessageBox.showerror("Error", "Please select a row to update.")
-    #
-    #     elif self._master._curr_page == UpdatePopupView.PRES_PAGE:
-    #         row = self._master._pres_sensor_view.displayReadings.focus()
-    #         reading_id = self._master._pres_sensor_view.displayReadings.item(row)["values"][0]
-    #         return reading_id

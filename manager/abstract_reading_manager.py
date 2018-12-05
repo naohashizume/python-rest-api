@@ -1,6 +1,6 @@
 # abstract_reading.py
 #
-# Abstract Reading script
+# Abstract Reading Manager script
 #
 # Authors: Nao Hashizume, Matt Harrison, Set 2B
 
@@ -9,6 +9,7 @@ from sqlalchemy.orm import sessionmaker
 
 import csv
 import json
+
 
 class AbstractReadingManager():
     """ Abstract Reading Manager Class """
@@ -19,8 +20,6 @@ class AbstractReadingManager():
         """ Initializer for AbstractReadingManager """
         engine = create_engine(db_name)
         self.DBSession = sessionmaker(bind=engine)
-        #self.reading_type = sensor_reading_type
-
 
     def add_reading(self, new_reading):
         """ Add a new reading to SQL database, TODO: validate"""
@@ -31,21 +30,17 @@ class AbstractReadingManager():
         session.close()
         return new_reading
 
-
     def get_reading(self, id):
         """Abstract method for retrieving a sensor reading"""
         raise NotImplementedError("Child class must implement abstract class")
-
 
     def get__all_readings(self):
         """Abstract method for retrieving all sensor readings"""
         raise NotImplementedError("Child class must implement abstract class")
 
-
     def delete_reading(self, id):
         """Abstract method for deleting an entry by id number"""
         raise NotImplementedError("Child class must implement abstract class")
-
 
     def update_reading(self, id, new_reading):
         """Abstract method for updating a reading by id number"""

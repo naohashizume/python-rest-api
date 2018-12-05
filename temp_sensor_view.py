@@ -1,6 +1,6 @@
 # temp_sensor_view.py
 #
-# TODO: Explain about this file
+# Temperature Sensor Reading View
 #
 # Author:  Nao Hashizume, Matt Harrison Set 2B
 
@@ -14,20 +14,17 @@ db_name = "sqlite:///readings.sqlite"
 API_ENDPOINT = "http://127.0.0.1:5000/sensor/"
 TEMP_READING_SUFFIX = "temperature/reading/all"
 
+
 class TempSensorView(tk.Frame):
-    """ TODO: Explain about this file """
+    """ Temperature Sensor Reading View """
 
     def __init__(self, parent, page_callback):
-        """ Initialize Temperature Sensor Page  """
+        """ Initialize Temperature Sensor Reading View """
         tk.Frame.__init__(self, parent)
         self._parent = parent
-
         self._page_callback = page_callback
-
         self._create_widgets()
-
         self.update_readings()
-
 
     def _create_widgets(self):
         """ Creates the widgets for Temperature Sensor Page """
@@ -81,8 +78,8 @@ class TempSensorView(tk.Frame):
         self.scrollbar.pack(side="right", fill="y")
         self.displayReadings.configure(yscrollcommand=self.scrollbar.set)
 
-
     def update_readings(self):
+        """ Refreshes the display of all temperature readings """
         if len(self.displayReadings.get_children()) != 0:
             item_list = self.displayReadings.get_children()
             for item in item_list:
