@@ -130,43 +130,26 @@ class PopupView(tk.Frame):
         """ Add a reading to the database via the API """
         new_timestamp = self.timestamp_entry.get()
         new_model = self.model_entry.get()
-        new_min_reading = float(self.min_entry.get())
-        new_avg_reading = float(self.avg_entry.get())
-        new_max_reading = float(self.max_entry.get())
+        new_min_reading = self.min_entry.get()
+        new_avg_reading = self.avg_entry.get()
+        new_max_reading = self.max_entry.get()
         new_status = self._status_var.get()
         if self._master._curr_page == PopupView.TEMP_PAGE:
             post_url = API_ENDPOINT + TEMP_READING_SUFFIX
             headers = {"content-type": "application/json"}
             reading_data = {"timestamp": new_timestamp, "model": new_model, "min_reading": new_min_reading, "avg_reading": new_avg_reading, "max_reading": new_max_reading, "status": new_status}
             response = requests.post(post_url, json=reading_data, headers=headers)
-            print(response)
-            print(reading_data)
-            self._master._temp_sensor_view.update_readings()
+            if response.status_code == 200:
+                self._master._temp_sensor_view.update_readings()
+            else:
+                tkMessageBox.showerror("Error", "Input data is invalid, please try again.")
         elif self._master._curr_page == PopupView.PRES_PAGE:
             post_url = API_ENDPOINT + PRES_READING_SUFFIX
             headers = {"content-type": "application/json"}
             reading_data = {"timestamp": new_timestamp, "model": new_model, "min_reading": new_min_reading,
                             "avg_reading": new_avg_reading, "max_reading": new_max_reading, "status": new_status}
             response = requests.post(post_url, json=reading_data, headers=headers)
-            self._master._pres_sensor_view.update_readings()
-
-
-    # def add_reading(self):
-    #     """ Old method to add a reading to the database using direct access to reading and manager classes"""
-    #     new_timestamp = datetime.datetime.strptime(self.entry_1.get(), PopupView.DATE_FORMAT)
-    #     new_model = self.entry_2.get()
-    #     new_min_reading = self.entry_3.get()
-    #     new_avg_reading = self.entry_4.get()
-    #     new_max_reading = self.entry_5.get()
-    #     new_status = self._status_var.get()
-    #     if self._master._curr_page == PopupView.TEMP_PAGE:
-    #         new_reading = TemperatureReading(new_timestamp, new_model, new_min_reading, new_avg_reading, new_max_reading, new_status)
-    #         temp_manager = TemperatureReadingManager(db_name)
-    #         temp_manager.add_reading(new_reading)
-    #         self._master._temp_sensor_view.update_readings()
-    #     elif self._master._curr_page == PopupView.PRES_PAGE:
-    #         new_reading = PressureReading(new_timestamp, new_model, new_min_reading, new_avg_reading,
-    #                                          new_max_reading, new_status)
-    #         temp_manager = PressureReadingManager(db_name)
-    #         temp_manager.add_reading(new_reading)
-    #         self._master._pres_sensor_view.update_readings()
+            if response.status_code == 200:
+                self._master._pres_sensor_view.update_readings()
+            else:
+                tkMessageBox.showerror("Error", "Input data is invalid, please try again.")
