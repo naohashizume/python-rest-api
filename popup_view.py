@@ -139,6 +139,7 @@ class PopupView(tk.Frame):
             headers = {"content-type": "application/json"}
             reading_data = {"timestamp": new_timestamp, "model": new_model, "min_reading": new_min_reading, "avg_reading": new_avg_reading, "max_reading": new_max_reading, "status": new_status}
             response = requests.post(post_url, json=reading_data, headers=headers)
+            print(response)
             print(reading_data)
             self._master._temp_sensor_view.update_readings()
         elif self._master._curr_page == PopupView.PRES_PAGE:

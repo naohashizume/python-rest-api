@@ -12,8 +12,6 @@ from readings.temperature_reading import TemperatureReading
 import json
 import datetime
 
-# temp_results_file = "data/temperature_results.csv"
-# press_results_file = "data/pressure_results.csv"
 db_name = "sqlite:///readings.sqlite"
 
 from flask import Flask

@@ -47,10 +47,10 @@ class TemperatureReadingManager(AbstractReadingManager):
         """ Delete a temperature reading from the SQL database by id """
         session = self.DBSession()
         del_reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
-        session.close()
         if del_reading is not None:
             session.delete(del_reading)
             session.commit()
+            session.close()
             return True
         else:
             return False
