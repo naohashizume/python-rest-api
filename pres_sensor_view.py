@@ -93,17 +93,3 @@ class PressureSensorView(tk.Frame):
             self.displayReadings.insert("", "end", values=[reading["id"], reading["timestamp"], reading["model"],
                                                            reading["min_reading"], reading["avg_reading"],
                                                            reading["max_reading"], reading["status"]])
-
-
-    # def update_readings(self):
-    #   """ Old update  """
-    #     if len(self.displayReadings.get_children()) != 0:
-    #         item_list = self.displayReadings.get_children()
-    #         for item in item_list:
-    #             self.displayReadings.delete(item)
-    #     db = PressureReadingManager(db_name)
-    #     temp_readings = db.get_all_readings()
-    #     for reading in temp_readings:
-    #         self.displayReadings.insert("", "end", values=[reading["id"], reading["timestamp"], reading["model"],
-    #                                                        reading["min_reading"], reading["avg_reading"],
-    #                                                        reading["max_reading"], reading["status"]])
