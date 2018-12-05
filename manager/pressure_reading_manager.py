@@ -53,10 +53,10 @@ class PressureReadingManager(AbstractReadingManager):
         session = self.DBSession()
         PressureReadingManager._validate_int_value(PressureReadingManager.ID, id)
         del_reading = session.query(PressureReading).filter(PressureReading.id == id).first()
-        session.close()
         if del_reading is not None:
             session.delete(del_reading)
             session.commit()
+            session.close()
             return True
         else:
             return False

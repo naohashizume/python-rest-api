@@ -50,10 +50,10 @@ class TemperatureReadingManager(AbstractReadingManager):
         session = self.DBSession()
         TemperatureReadingManager._validate_int_value(TemperatureReadingManager.ID, id)
         del_reading = session.query(TemperatureReading).filter(TemperatureReading.id == id).first()
-        session.close()
         if del_reading is not None:
             session.delete(del_reading)
             session.commit()
+            session.close()
             return True
         else:
             return False
