@@ -1,32 +1,30 @@
-# test_pressure_reading_manager.py
+# test_pres_reading_manager.py
 #
 #  Unit test for Pressure Reading Managaer
 #
 # Authors: Nao Hashizume, Matt Harrison, Set 2B
 #
-
 from manager.pressure_reading_manager import PressureReadingManager
 from readings.pressure_reading import PressureReading
 from unittest import TestCase
 import inspect
-import csv
 import datetime
 import os
 import sqlite3
+
 
 class TestPressureReadingManager(TestCase):
     """ Unit Tests for the Pressure Reading Manager Class """
 
     DROP_TABLE_STATEMENT = "DROP TABLE pressure_reading"
-    DATABASE_NAME =  "sqlite:///test_pres_reading.sqlite"
+    DATABASE_NAME = "sqlite:///test_pres_reading.sqlite"
     TEST_TIMESTAMP = "2018-12-03 8:30"
     TEST_MODEL = "ABC Sensor Press M100"
     TEST_MIN_VALUE = 49.213
     TEST_AVG_VALUE = 50.111
     TEST_MAX_VALUE = 52.567
-    TEST_STATUS = "OK"
+    TEST_STATUS = "GOOD"
     DATE_FORMAT = "%Y-%m-%d %H:%M"
-
 
     def setUp(self):
         """ Called once, before any tests """
@@ -57,7 +55,6 @@ class TestPressureReadingManager(TestCase):
 
     def tearDown(self):
         """ Called once, after all tests, if setUp class successful """
-        # self.test_pres_manager.session.close()
         self.test_pres_manager = None
         os.remove("test_pres_reading.sqlite")
         self.logPoint()
@@ -99,37 +96,57 @@ class TestPressureReadingManager(TestCase):
 
     def test_update_reading_valid(self):
         """ 030A - Valid Update Reading """
-        # new_reading = PressureReading(datetime.datetime.strptime("2018-09-23 19:59", "%Y-%m-%d %H:%M"),
-        #                           "ABC Sensor New Pres M100",
-        #                           float(50.513),
-        #                           float(51.745),
-        #                           float(53.105),
-        #                           "OK")
-        # self.test_pres_manager.update_reading(1, new_reading)
-        # updated_reading = self.test_pres_manager.get_reading(1)
-        # self.assertEqual(new_reading.to_dict(), updated_reading.to_dict())
+        new_reading = PressureReading(datetime.datetime.strptime("2018-09-23 19:59", "%Y-%m-%d %H:%M"),
+                                      "ABC Sensor New Pres M100",
+                                      float(50.513),
+                                      float(51.745),
+                                      float(53.105),
+                                      "GOOD")
+        updated_reading = self.test_pres_manager.update_reading(1, new_reading)
+        self.assertTrue(updated_reading)
 
     def test_update_reading_invalid(self):
         """ 030B - Invalid Update Reading """
-        pass
+        new_reading = PressureReading(datetime.datetime.strptime("2018-09-23 19:59", "%Y-%m-%d %H:%M"),
+                                      "ABC Sensor New Pres M100",
+                                      float(50.513),
+                                      float(51.745),
+                                      float(53.105),
+                                      "GOOD")
+        with self.assertRaises(ValueError):
+            self.test_pres_manager.update_reading(None, None)
+            self.test_pres_manager.update_reading(1, None)
+            self.test_pres_manager.update_reading(None, new_reading)
+            self.test_pres_manager.update_reading("", "")
+            self.test_pres_manager.update_reading(1, "")
+            self.test_pres_manager.update_reading("", new_reading)
 
     def test_delete_reading_valid(self):
         """ 040A - Valid Delete Reading """
-        pass
+        deleted_reading = self.test_pres_manager.delete_reading(1)
+        self.assertTrue(deleted_reading)
 
     def test_delete_reading_invalid(self):
         """ 040B - Invalid Delete Reading """
-        pass
+        with self.assertRaises(ValueError):
+            self.test_pres_manager.delete_reading(None)
+            self.test_pres_manager.delete_reading("")
 
     def test_get_reading_valid(self):
         """ 050A - Valid Get Reading """
-        pass
+        get_reading = self.test_pres_manager.get_reading(1)
+        self.assertIsInstance(get_reading, PressureReading)
 
     def test_get_reading_invalid(self):
         """ 050B - Invalid Get Reading """
-        pass
+        with self.assertRaises(ValueError):
+            self.test_pres_manager.get_reading(None)
+            self.test_pres_manager.get_reading("")
+            self.test_pres_manager.get_reading(str(1))
 
     def test_get_all_readings_valid(self):
         """ 060A - Valid Get All Readings """
-        pass
+        self.assertEqual(len(self.test_pres_manager.get_all_readings()), 1)
+
+
 

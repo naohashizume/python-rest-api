@@ -14,6 +14,8 @@ class PressureReadingManager(AbstractReadingManager):
 
     DATE_FORMAT = '%Y-%m-%d %H:%M'
     DB_NAME = "Database Name"
+    ID = "ID"
+    NEW_READING = "New Reading"
 
     def __init__(self, db_name):
         """ Constructor for PressureReadingManager class """
@@ -24,6 +26,7 @@ class PressureReadingManager(AbstractReadingManager):
     def get_reading(self, id):
         """ Get a reading from the SQL database by id """
         session = self.DBSession()
+        PressureReadingManager._validate_int_value(PressureReadingManager.ID, id)
         reading = session.query(PressureReading).filter(PressureReading.id == id).first()
         session.close()
         if reading is not None:
@@ -49,6 +52,7 @@ class PressureReadingManager(AbstractReadingManager):
     def delete_reading(self, id):
         """ Delete reading from the SQL database by id """
         session = self.DBSession()
+        PressureReadingManager._validate_int_value(PressureReadingManager.ID, id)
         del_reading = session.query(PressureReading).filter(PressureReading.id == id).first()
         session.close()
         if del_reading is not None:
@@ -62,8 +66,9 @@ class PressureReadingManager(AbstractReadingManager):
     def update_reading(self, id, new_reading):
         """ Update reading in the SQL database by id"""
         session = self.DBSession()
+        PressureReadingManager._validate_int_value(PressureReadingManager.ID, id)
         update_reading = session.query(PressureReading).filter(PressureReading.id == id).first()
-
+        PressureReadingManager._validate_inp_value(PressureReadingManager.NEW_READING, new_reading)
         if update_reading is not None:
             new_reading_dict = new_reading.to_dict()
             update_reading.timestamp = datetime.datetime.strptime(new_reading_dict["timestamp"], PressureReadingManager.DATE_FORMAT)
@@ -80,7 +85,7 @@ class PressureReadingManager(AbstractReadingManager):
 
     @staticmethod
     def _validate_str_value(display_name, str_value):
-        """ Private helper to validate int values """
+        """ Private helper to validate string values """
         if str_value is None:
             raise ValueError(display_name + " cannot be undefined.")
 
@@ -89,4 +94,29 @@ class PressureReadingManager(AbstractReadingManager):
 
         if not isinstance(str_value, str):
             raise ValueError(display_name + " must be string.")
+
+    @staticmethod
+    def _validate_int_value(display_name, int_value):
+        """ Private helper to validate integer values """
+        if int_value is None:
+            raise ValueError(display_name + " cannot be undefined.")
+
+        if int_value == "":
+            raise ValueError(display_name + " cannot be empty.")
+
+        if not isinstance(int_value, int):
+            raise ValueError(display_name + " must be integer.")
+
+    @staticmethod
+    def _validate_inp_value(display_name, inp_value):
+        """ Private helper to validate input values """
+        if inp_value is None:
+            raise ValueError(display_name + " cannot be undefined.")
+
+        if inp_value == "":
+            raise ValueError(display_name + " cannot be empty.")
+
+
+
+
 
